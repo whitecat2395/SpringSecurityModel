@@ -10,6 +10,7 @@ public class RoleServiceImpl {
     @Autowired
     private RoleMapper mapper;
 
+    //添加用户和角色关联关系
     public int addRoleByUserName(Integer userid ,Integer roleid) {
         return mapper.connectUserAndRole(userid,roleid);
     }
