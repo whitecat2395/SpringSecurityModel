@@ -15,6 +15,7 @@ public class UserRequest {
     /**
      * 前端接口User对象
      */
+
     /**
      * 用户名
      */
@@ -43,4 +44,12 @@ public class UserRequest {
      * 地址
      */
     private String address;
+    /**
+     * 状态
+     */
+    private String statue;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 }

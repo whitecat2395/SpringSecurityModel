@@ -11,6 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
+/**
+ * TODO
+ *
+ * @Author zhouzheng
+ * @Date 2023/3/7 12:09
+ */
+
 @RestController
 public class LoginController {
 
@@ -20,7 +27,6 @@ public class LoginController {
     @PostMapping("/user/login")
     public CommonResult<Map<String, String>> login(@RequestBody UserRequest user){
         return loginService.loginUser(user);
-
     }
     @GetMapping("/user/logout")
     public CommonResult logOut(){

@@ -21,11 +21,42 @@
         <result column="del_flag" jdbcType="TINYINT" property="delFlag"></result>
     </resultMap>
 
-    <select id="queryAllUser" resultMap="baseResultMap"  >
-        select * from t_user
+    <update id="updateUser" parameterType="com.zhou.demo.persist.po.User">
+        update t_user set
+        username = #{userName},statue=#{statue},email=#{email},phone=#{phone},avatar=#{avatar}
+        ,address=#{address},updateBy=#{updateBy},updateTime=#{updateTime}
+        where id=#{id}
+    </update>
+
+    <select id="queryAllUser" resultMap="baseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
+        select id,
+        username,statue,email,phone,avatar
+        ,address,create_time
+        from t_user
+        <where>
+            <if test="keyword != null and keyword != ''">like username = #{keyword}</if>
+            limit #{pageindex},#{pagesize}
+        </where>
+    </select>
+    <select id="queryUserCount" resultMap="baseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
+        select id,
+        username,statue,email,phone,avatar
+        ,address,create_time
+        from t_user
+        <where>
+            <if test="keyword != null and keyword != ''">like username = #{keyword}</if>
+            limit #{pageindex},#{pagesize}
+        </where>
     </select>
 
-    <select id="queryUserById" parameterType="String" resultMap="baseResultMap">
+    <select id="showUserById" parameterType="java.lang.Integer" resultMap="baseResultMap">
+        select
+        username,statue,email,phone,avatar
+        ,address,create_time
+        from t_user
+        where id=#{id}
+    </select>
+    <select id="queryUserById" parameterType="java.lang.Integer" resultMap="baseResultMap">
         select * from t_user where id = #{id}
     </select>
 
@@ -33,7 +64,7 @@
         select * from t_user where username = #{userName}
     </select>
 
-    <insert id="addUser"  parameterType="com.zhou.demo.persist.po.User">
+    <insert id="addUser" parameterType="com.zhou.demo.persist.po.User">
         insert into t_user
         (username,password,statue,role_id,user_type,real_Name,email,phone,avatar,address,sex,create_by,create_time,update_by,update_Time,del_flag)
         values

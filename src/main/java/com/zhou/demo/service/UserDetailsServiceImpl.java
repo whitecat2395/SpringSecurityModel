@@ -1,5 +1,7 @@
 package com.zhou.demo.service;
 
+import com.zhou.demo.controller.request.SearchParams;
+import com.zhou.demo.controller.request.UserRequest;
 import com.zhou.demo.domain.LoginUser;
 import com.zhou.demo.persist.mapper.MenuMapper;
 import com.zhou.demo.persist.mapper.UserMapper;
@@ -41,8 +43,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new LoginUser(user,permissions);
     }
 
-    public List<User> queryAllUser() {
-        return userMapper.queryAllUser();
+    public Map<String,Object> queryAllUser(SearchParams searchParams) {
+        //判断page大小和起始位置
+        Integer pagenum = searchParams.getPagenum();
+        Integer pagesize = searchParams.getPagesize();
+        searchParams.setPageindex(pagenum==0 ?0:pagenum*pagesize);
+        List<User> users = userMapper.queryAllUser(searchParams);
+        searchParams.setTotal(userMapper.queryUserCount(searchParams));
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userList",users);
+        map.put("SearchParams",searchParams);
+        return map;
     }
 
     public User queryUserById(String id) {
@@ -67,5 +78,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public User queryUserByName(String userName) {
         return userMapper.queryUserByName(userName);
+    }
+
+    public User showUserById(Integer userid){
+        return userMapper.showUserById(userid);
+    }
+    public int updateUser(User user) {
+        return userMapper.updateUser(user);
     }
 }
