@@ -24,8 +24,7 @@ public class LoginUser implements UserDetails {
     private List<String> permissions;
 
     @JSONField(serialize = false)
-    private List<GrantedAuthority> authorities =new ArrayList<>();
-
+    private List<GrantedAuthority> authorities;
     public LoginUser(User user, List<String> permissions) {
         this.user = user;
         this.permissions = permissions;
@@ -33,15 +32,17 @@ public class LoginUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(authorities!=null){
+        if(authorities != null){
             return authorities;
         }
         //方法1
+        List<GrantedAuthority> list =new ArrayList<>();
         for(String permission:permissions){
             System.out.println("--"+permission);
             SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permission);
-            authorities.add(authority);
+            list.add(authority);
         }
+        authorities=list;
         //方法2   stream流 函数式编程。
 //        authorities = permissions.stream()
 //                .map(SimpleGrantedAuthority::new)

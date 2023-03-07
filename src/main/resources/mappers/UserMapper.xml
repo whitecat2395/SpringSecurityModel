@@ -20,7 +20,41 @@
         <result column="insert_time" jdbcType="TIMESTAMP" property="updateTime"></result>
         <result column="del_flag" jdbcType="TINYINT" property="delFlag"></result>
     </resultMap>
-
+    <resultMap id="ResponseResultMap" type="com.zhou.demo.controller.response.UserResponse">
+        <result column="id" jdbcType="VARCHAR" property="id"></result>
+        <result column="username" jdbcType="VARCHAR" property="userName"></result>
+        <result column="statue" jdbcType="CHAR" property="statue"></result>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"></result>
+        <result column="user_type" jdbcType="CHAR" property="userType"></result>
+        <result column="real_name" jdbcType="VARCHAR" property="realName"></result>
+        <result column="email" jdbcType="VARCHAR" property="email"></result>
+        <result column="phone" jdbcType="VARCHAR" property="phone"></result>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"></result>
+        <result column="address" jdbcType="VARCHAR" property="address"></result>
+        <result column="sex" jdbcType="CHAR" property="sex"></result>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+        <result column="del_flag" jdbcType="TINYINT" property="delFlag"></result>
+    </resultMap>
+    <select id="queryAllUser" resultMap="ResponseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
+        select id,
+        username,
+        statue,
+        role_id,
+        user_type,
+        real_name,
+        email,
+        phone,
+        avatar,
+        address,
+        sex,
+        create_time,
+        del_flag
+        from t_user
+        <where>
+            <if test="keyword != null and keyword != ''">like username = #{keyword}</if>
+        </where>
+        limit #{pageindex},#{pagesize}
+    </select>
     <update id="updateUser" parameterType="com.zhou.demo.persist.po.User">
         update t_user set
         username = #{userName},statue=#{statue},email=#{email},phone=#{phone},avatar=#{avatar}
@@ -28,25 +62,14 @@
         where id=#{id}
     </update>
 
-    <select id="queryAllUser" resultMap="baseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
-        select id,
-        username,statue,email,phone,avatar
-        ,address,create_time
+    <select id="queryUserCount" resultType="java.lang.Integer"
+            parameterType="com.zhou.demo.controller.request.SearchParams">
+        select count(id)
         from t_user
         <where>
             <if test="keyword != null and keyword != ''">like username = #{keyword}</if>
-            limit #{pageindex},#{pagesize}
         </where>
-    </select>
-    <select id="queryUserCount" resultMap="baseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
-        select id,
-        username,statue,email,phone,avatar
-        ,address,create_time
-        from t_user
-        <where>
-            <if test="keyword != null and keyword != ''">like username = #{keyword}</if>
-            limit #{pageindex},#{pagesize}
-        </where>
+        limit #{pageindex},#{pagesize}
     </select>
 
     <select id="showUserById" parameterType="java.lang.Integer" resultMap="baseResultMap">

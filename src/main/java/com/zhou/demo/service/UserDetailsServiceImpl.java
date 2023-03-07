@@ -2,6 +2,7 @@ package com.zhou.demo.service;
 
 import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.controller.request.UserRequest;
+import com.zhou.demo.controller.response.UserResponse;
 import com.zhou.demo.domain.LoginUser;
 import com.zhou.demo.persist.mapper.MenuMapper;
 import com.zhou.demo.persist.mapper.UserMapper;
@@ -47,8 +48,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         //判断page大小和起始位置
         Integer pagenum = searchParams.getPagenum();
         Integer pagesize = searchParams.getPagesize();
-        searchParams.setPageindex(pagenum==0 ?0:pagenum*pagesize);
-        List<User> users = userMapper.queryAllUser(searchParams);
+        searchParams.setPageindex(pagenum==0 ?0:(pagenum-1)*pagesize);
+        List<UserResponse> users = userMapper.queryAllUser(searchParams);
         searchParams.setTotal(userMapper.queryUserCount(searchParams));
         HashMap<String, Object> map = new HashMap<>();
         map.put("userList",users);

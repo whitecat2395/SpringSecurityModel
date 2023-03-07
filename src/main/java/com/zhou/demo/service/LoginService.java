@@ -61,9 +61,10 @@ public class LoginService {
         //2.在redis中删除这个用户的token。
         Boolean flag = redisTemplate.delete("login:" + userid);
         System.out.println("退出结果："+flag);
+        if(flag==false){
+            return new CommonResult(200,"退出失败");
+        }
         Map<String, String> map = new HashMap<>();
-        CommonResult result = new CommonResult(200, "退出成功");
-        System.out.println(result.toString());
-        return result;
+        return new CommonResult(200, "退出成功");
     }
 }

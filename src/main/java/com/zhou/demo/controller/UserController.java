@@ -8,6 +8,8 @@ import com.zhou.demo.service.RoleServiceImpl;
 import com.zhou.demo.service.UserDetailsServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -29,9 +31,16 @@ public class UserController {
 //        userService.loadUserByUsername(username);
 //        return "";
 //    }
-
-    @GetMapping("/user/userlist")
-    public CommonResult<Map> userList(@RequestBody SearchParams searchParams){
+    @PreAuthorize("hasAuthority('system:user:list')")
+    @GetMapping("/user/queryUserList")
+    public CommonResult<Map> userList(@RequestParam("keyword") String keyword,
+                                      @RequestParam("pagenum") Integer pagenum,
+                                      @RequestParam("pagesize") Integer pagesize,
+                                      @RequestParam("total") Integer total){
+        SearchParams searchParams = new SearchParams();
+        searchParams.setKeyword(keyword);
+        searchParams.setPagenum(pagenum);
+        searchParams.setPagesize(pagesize);
         Map map= (Map) userService.queryAllUser(searchParams);
         return new CommonResult<Map>(200,"查询成功",map);
     }

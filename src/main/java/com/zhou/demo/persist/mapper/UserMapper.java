@@ -1,6 +1,7 @@
 package com.zhou.demo.persist.mapper;
 
 import com.zhou.demo.controller.request.SearchParams;
+import com.zhou.demo.controller.response.UserResponse;
 import com.zhou.demo.persist.po.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface UserMapper {
 
 
-    List<User> queryAllUser(SearchParams searchParams);
+    List<UserResponse> queryAllUser(SearchParams searchParams);
 
     User queryUserById(String id);
 
