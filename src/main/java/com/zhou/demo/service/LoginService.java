@@ -3,7 +3,6 @@ package com.zhou.demo.service;
 import com.zhou.demo.controller.request.UserRequest;
 import com.zhou.demo.domain.CommonResult;
 import com.zhou.demo.domain.LoginUser;
-import com.zhou.demo.persist.po.User;
 import com.zhou.demo.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
