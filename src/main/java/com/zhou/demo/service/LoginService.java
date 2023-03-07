@@ -42,7 +42,7 @@ public class LoginService {
         String userid = loginUser.getUser().getId().toString();
         System.out.println("userid: "+userid);
         String jwt = JwtUtils.createToken(userid);
-        System.out.println("token: "+jwt);
+        System.out.println("token:"+jwt);
         Map<String, String> map = new HashMap<>();
         map.put("token",jwt);
         //把完整的用户信息存入redis中 userid作为key。
