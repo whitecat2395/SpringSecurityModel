@@ -49,8 +49,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         //2.解析token
         String userId=null;
-        if(JwtUtils.checkToken(token)){
+        if(!JwtUtils.checkToken(token)){
             filterChain.doFilter(request,response);
+            //不是最后一个放行，一定要加return;  报错 cannot call sendError() after the response has been committed
+            return;
         }
         userId = JwtUtils.getUserId(token);
         System.out.println("---"+userId);

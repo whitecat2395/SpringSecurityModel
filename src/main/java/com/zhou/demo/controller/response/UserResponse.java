@@ -20,7 +20,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
+public class UserResponse implements Serializable{
         private Integer id;
         private String userName;
         private String statue;

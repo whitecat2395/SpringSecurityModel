@@ -69,6 +69,22 @@ public class UserController {
         return new CommonResult(200,"查询成功",user);
     }
 
+    @PostMapping("/user/registerUser")
+    public CommonResult registerUser(@RequestBody UserRequest userRequest){
+        User user = new User();
+        //工具类属性赋值
+        BeanUtils.copyProperties(userRequest,user);
+        //userType=1，普通用户
+        int flag = userService.addUser(user,"1");
+        if(flag==0){
+            return new CommonResult(200,"注册失败");
+        }
+        User user1 = userService.queryUserByName(user.getUserName());
+        //为用户绑定角色
+        int flag1 = roleService.addRoleByUserName(user1.getId(), 2);
+        return new CommonResult(200,"注册成功");
+    }
+
     @PostMapping("/user/addUser")
     public CommonResult addUser(@RequestBody UserRequest userRequest){
         User user = new User();

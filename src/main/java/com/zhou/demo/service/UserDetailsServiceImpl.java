@@ -81,7 +81,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         //设置为普通用户
         //绑定角色 -买家平台  买家角色id=2
         user.setRoleId(2);
-        user.setUserType("1");
+        user.setUserType(userType);
         user.setDelFlag(false);
         user.setStatue("0");
         user.setAvatar("**/**.img"); //配置默认图片
