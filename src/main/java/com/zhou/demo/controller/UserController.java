@@ -2,6 +2,7 @@ package com.zhou.demo.controller;
 
 import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.controller.request.UserRequest;
+import com.zhou.demo.controller.response.UserResponse;
 import com.zhou.demo.domain.CommonResult;
 import com.zhou.demo.persist.po.User;
 import com.zhou.demo.service.RoleServiceImpl;
@@ -41,12 +42,16 @@ public class UserController {
         searchParams.setKeyword(keyword);
         searchParams.setPagenum(pagenum);
         searchParams.setPagesize(pagesize);
-        Map map= (Map) userService.queryAllUser(searchParams);
+        Map map= userService.queryAllUser(searchParams);
         return new CommonResult<Map>(200,"查询成功",map);
     }
+    @PreAuthorize("hasAuthority('system:user:list')")
+    @PostMapping("/user/userEdit")
+    public CommonResult Edituser(@RequestBody UserResponse userResponse){
+        User user = new User();
+        //工具类属性赋值
+        BeanUtils.copyProperties(userResponse,user);
 
-    @GetMapping("/user/userUpdate")
-    public CommonResult userUpdate(@RequestBody User user){
         int flag = userService.updateUser(user);
         if(flag==0){
             return new CommonResult(200,"更新失败");
@@ -62,8 +67,9 @@ public class UserController {
         }
         return new CommonResult(200,"查询成功",user);
     }
+
     @PostMapping("/user/addUser")
-    public CommonResult adduser(@RequestBody UserRequest userRequest){
+    public CommonResult addUser(@RequestBody UserRequest userRequest){
         User user = new User();
         //工具类属性赋值
         BeanUtils.copyProperties(userRequest,user);
@@ -77,4 +83,15 @@ public class UserController {
         int flag1 = roleService.addRoleByUserName(user1.getId(), 2);
         return new CommonResult(200,"注册成功");
     }
+
+    @PreAuthorize("hasAuthority('system:user:list')")
+    @DeleteMapping("/user/delUser/{id}")
+    public CommonResult delUser(@PathVariable Integer  id){
+        int flag =userService.deleteUserById(id);
+        if(flag==0){
+            return new CommonResult(200,"删除失败");
+        }
+        return new CommonResult(200,"删除成功");
+    }
+
 }

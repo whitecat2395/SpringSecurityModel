@@ -25,4 +25,6 @@ public interface UserMapper {
 
     Integer queryUserCount(SearchParams searchParams);
 
+    int deleteUser(Integer id);
+
 }

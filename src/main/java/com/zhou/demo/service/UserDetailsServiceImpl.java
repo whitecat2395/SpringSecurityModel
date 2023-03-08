@@ -1,20 +1,22 @@
 package com.zhou.demo.service;
 
 import com.zhou.demo.controller.request.SearchParams;
-import com.zhou.demo.controller.request.UserRequest;
 import com.zhou.demo.controller.response.UserResponse;
 import com.zhou.demo.domain.LoginUser;
 import com.zhou.demo.persist.mapper.MenuMapper;
 import com.zhou.demo.persist.mapper.UserMapper;
 import com.zhou.demo.persist.po.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -26,6 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserMapper userMapper;
     @Autowired
     private MenuMapper menuMapper;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -46,12 +49,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public Map<String,Object> queryAllUser(SearchParams searchParams) {
         //判断page大小和起始位置
+        String keyword=searchParams.getKeyword();
+        if(keyword != "") {
+            searchParams.setKeyword("%"+keyword+"%");
+        }
         Integer pagenum = searchParams.getPagenum();
         Integer pagesize = searchParams.getPagesize();
-        searchParams.setPageindex(pagenum==0 ?0:(pagenum-1)*pagesize);
+        searchParams.setPageindex(pagenum==0 ? 0:(pagenum-1)*pagesize);
         List<UserResponse> users = userMapper.queryAllUser(searchParams);
         searchParams.setTotal(userMapper.queryUserCount(searchParams));
         HashMap<String, Object> map = new HashMap<>();
+        if(keyword!=null){
+            searchParams.setKeyword(keyword);
+        }
+        //装填参数
         map.put("userList",users);
         map.put("SearchParams",searchParams);
         return map;
@@ -70,7 +81,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         //绑定角色 -买家平台  买家角色id=2
         user.setRoleId(2);
         user.setUserType("1");
-        user.setRoleId(1);
+        user.setDelFlag(false);
+        user.setStatue("0");
         user.setAvatar("**/**.img"); //配置默认图片
         user.setCreateTime(date);
         user.setCreateBy(2395);
@@ -84,7 +96,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public User showUserById(Integer userid){
         return userMapper.showUserById(userid);
     }
+
     public int updateUser(User user) {
+        //从handler中获取当前用户的信息
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser= (LoginUser)authentication.getPrincipal();
+        Integer userid = loginUser.getUser().getId();
+        user.setUpdateBy(userid);
+        user.setUpdateTime(new Date());
         return userMapper.updateUser(user);
+    }
+
+    public int deleteUserById(Integer id) {
+        return userMapper.deleteUser(id);
     }
 }

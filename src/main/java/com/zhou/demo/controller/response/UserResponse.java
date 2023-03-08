@@ -24,12 +24,25 @@ public class UserResponse {
         private Integer id;
         private String userName;
         private String statue;
+        /**
+         * 角色id
+         *
+         */
         private Integer roleId;
+        /**
+         * 用户类型 普通用户|管理员用户
+         */
         private String userType;
         private String realName;
         private String email;
         private String phone;
+        /**
+         * 头像
+         */
         private String avatar;
+        /**
+         * 地址
+         */
         private String address;
         private String sex;
         private Date createTime;

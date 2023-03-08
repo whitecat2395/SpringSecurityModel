@@ -17,7 +17,7 @@
         <result column="create_by" jdbcType="INTEGER" property="createBy"></result>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
         <result column="update_by" jdbcType="INTEGER" property="updateBy"></result>
-        <result column="insert_time" jdbcType="TIMESTAMP" property="updateTime"></result>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"></result>
         <result column="del_flag" jdbcType="TINYINT" property="delFlag"></result>
     </resultMap>
     <resultMap id="ResponseResultMap" type="com.zhou.demo.controller.response.UserResponse">
@@ -35,6 +35,9 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
         <result column="del_flag" jdbcType="TINYINT" property="delFlag"></result>
     </resultMap>
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        update t_user set del_flag = 1 where id=#{id}
+    </delete>
     <select id="queryAllUser" resultMap="ResponseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
         select id,
         username,
@@ -51,26 +54,50 @@
         del_flag
         from t_user
         <where>
-            <if test="keyword != null and keyword != ''">like username = #{keyword}</if>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''"> AND username like #{keyword}</if>
         </where>
         limit #{pageindex},#{pagesize}
     </select>
-    <update id="updateUser" parameterType="com.zhou.demo.persist.po.User">
-        update t_user set
-        username = #{userName},statue=#{statue},email=#{email},phone=#{phone},avatar=#{avatar}
-        ,address=#{address},updateBy=#{updateBy},updateTime=#{updateTime}
-        where id=#{id}
-    </update>
 
     <select id="queryUserCount" resultType="java.lang.Integer"
             parameterType="com.zhou.demo.controller.request.SearchParams">
         select count(id)
         from t_user
         <where>
-            <if test="keyword != null and keyword != ''">like username = #{keyword}</if>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">AND  username like #{keyword}</if>
         </where>
-        limit #{pageindex},#{pagesize}
     </select>
+
+    <update id="updateUser" parameterType="com.zhou.demo.persist.po.User">
+        update t_user set
+        <if test="userName != null and userName != ''">
+            username = #{userName},
+        </if>
+        <if test="statue != null and statue != ''">
+            statue=#{statue},
+        </if>
+        <if test="email != null and email != ''">
+            email=#{email},
+        </if>
+        <if test="sex != null and sex != ''">
+            sex=#{sex},
+        </if>
+        <if test="phone != null and phone != ''">
+            phone=#{phone},
+        </if>
+        <if test="avatar != null and avatar != ''">
+            avatar=#{avatar},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            update_by=#{updateBy},
+        </if>
+        <if test="updateTime != null">
+            update_time=#{updateTime}
+        </if>
+        where id=#{id}
+    </update>
 
     <select id="showUserById" parameterType="java.lang.Integer" resultMap="baseResultMap">
         select
