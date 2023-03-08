@@ -99,6 +99,14 @@
         where id=#{id}
     </update>
 
+    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.UserStatuePo">
+        update t_user set
+        <if test="statue != null and statue != ''">
+            statue=#{statue}
+        </if>
+        where id=#{id}
+    </update>
+
     <select id="showUserById" parameterType="java.lang.Integer" resultMap="baseResultMap">
         select
         username,statue,email,phone,avatar

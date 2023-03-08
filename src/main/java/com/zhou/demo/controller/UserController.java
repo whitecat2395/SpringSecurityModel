@@ -5,6 +5,7 @@ import com.zhou.demo.controller.request.UserRequest;
 import com.zhou.demo.controller.response.UserResponse;
 import com.zhou.demo.domain.CommonResult;
 import com.zhou.demo.persist.po.User;
+import com.zhou.demo.persist.po.UserStatuePo;
 import com.zhou.demo.service.RoleServiceImpl;
 import com.zhou.demo.service.UserDetailsServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -82,6 +83,19 @@ public class UserController {
         //为用户绑定角色
         int flag1 = roleService.addRoleByUserName(user1.getId(), 2);
         return new CommonResult(200,"注册成功");
+    }
+
+
+    @PreAuthorize("hasAuthority('system:user:list')")
+    @PutMapping("/user/{id}/statue/{statue}")
+    public CommonResult updateStatue(@PathVariable String id,
+                                     @PathVariable String statue){
+        UserStatuePo userStatuePo = new UserStatuePo(Integer.parseInt(id),statue);
+        int flag =userService.updateStatue(userStatuePo);
+        if(flag==0){
+            return new CommonResult(200,"修改失败");
+        }
+        return new CommonResult(200,"修改成功");
     }
 
     @PreAuthorize("hasAuthority('system:user:list')")

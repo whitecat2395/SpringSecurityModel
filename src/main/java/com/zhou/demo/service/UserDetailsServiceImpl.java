@@ -6,6 +6,7 @@ import com.zhou.demo.domain.LoginUser;
 import com.zhou.demo.persist.mapper.MenuMapper;
 import com.zhou.demo.persist.mapper.UserMapper;
 import com.zhou.demo.persist.po.User;
+import com.zhou.demo.persist.po.UserStatuePo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -109,5 +110,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public int deleteUserById(Integer id) {
         return userMapper.deleteUser(id);
+    }
+
+    public int updateStatue(UserStatuePo userStatuePo) {
+        return userMapper.updateStatue(userStatuePo);
     }
 }
