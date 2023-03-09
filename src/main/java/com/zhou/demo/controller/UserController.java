@@ -6,7 +6,7 @@ import com.zhou.demo.controller.response.UserResponse;
 import com.zhou.demo.domain.CommonResult;
 import com.zhou.demo.persist.po.User;
 import com.zhou.demo.persist.po.UserStatuePo;
-import com.zhou.demo.service.RoleServiceImpl;
+import com.zhou.demo.service.RoleService;
 import com.zhou.demo.service.UserDetailsServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class UserController {
     @Autowired
     UserDetailsServiceImpl userService;
     @Autowired
-    RoleServiceImpl roleService;
+    RoleService roleService;
 
 //    @PostMapping("/userlogin")
 //    public String userlogin(@RequestParam("username") String username,

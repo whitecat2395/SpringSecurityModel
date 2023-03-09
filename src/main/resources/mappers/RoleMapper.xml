@@ -1,49 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhou.demo.persist.mapper.RoleMapper">
-    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.User">
-        <result column="id" jdbcType="VARCHAR" property="id"></result>
-        <result column="username" jdbcType="VARCHAR" property="userName"></result>
-        <result column="password" jdbcType="VARCHAR" property="passWord"></result>
+    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.Role">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"></result>
         <result column="statue" jdbcType="CHAR" property="statue"></result>
-        <result column="role_id" jdbcType="INTEGER" property="roleId"></result>
-        <result column="user_type" jdbcType="CHAR" property="userType"></result>
-        <result column="real_name" jdbcType="VARCHAR" property="realName"></result>
-        <result column="email" jdbcType="VARCHAR" property="email"></result>
-        <result column="phone" jdbcType="VARCHAR" property="phone"></result>
-        <result column="avatar" jdbcType="VARCHAR" property="avatar"></result>
-        <result column="address" jdbcType="VARCHAR" property="address"></result>
-        <result column="sex" jdbcType="CHAR" property="sex"></result>
+        <result column="remark" jdbcType="TIMESTAMP" property="remark"></result>
         <result column="create_by" jdbcType="INTEGER" property="createBy"></result>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
         <result column="update_by" jdbcType="INTEGER" property="updateBy"></result>
-        <result column="insert_time" jdbcType="TIMESTAMP" property="updateTime"></result>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"></result>
         <result column="del_flag" jdbcType="TINYINT" property="delFlag"></result>
     </resultMap>
 
-    <select id="queryAllRole" resultMap="baseResultMap"  >
-        select * from t_user
+    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.RoleStatuePo">
+        update t_role
+        set
+        statue=#{statue}
+        where id=#{id}
+    </update>
+    <update id="updateRole">
+        update t_role
+        set
+        role_name=#{roleName},
+        remark=#{remark}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteRole" parameterType="java.lang.Integer">
+        update t_role
+        set
+        del_flag = #{delFlag}
+        where id=#{id}
+    </delete>
+
+    <select id="queryAllRole" resultMap="baseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams"  >
+        select * from t_role
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''"> AND role_name like #{keyword}</if>
+        </where>
+        limit #{pageindex},#{pagesize}
     </select>
 
-    <select id="queryRoleById" parameterType="String" resultMap="baseResultMap">
-        select * from t_user where id = #{id}
+    <select id="queryRoleCount" resultType="java.lang.Integer" parameterType="com.zhou.demo.controller.request.SearchParams">
+        select count(id)
+        from t_role
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''"> AND role_name like #{keyword}</if>
+        </where>
     </select>
-
-    <select id="queryUserByName" parameterType="String" resultMap="baseResultMap">
-        select * from t_user where username = #{userName}
-    </select>
-
-    <insert id="addUser"  parameterType="com.zhou.demo.persist.po.User">
-        insert into t_user
-        (username,password,statue,role_id,user_type,real_Name,email,phone,avatar,address,sex,create_by,create_time,update_by,update_Time,del_flag)
-        values
-        (#{userName},#{passWord},#{statue},#{roleId},#{userType},#{realName},#{email},#{phone},#{avatar},#{address},#{sex},#{createBy},#{createTime},#{updateBy},#{updateTime},#{delFlag})
-    </insert>
 
     <insert id="connectUserAndRole" parameterType="java.lang.Integer">
         insert into t_user_role
         (user_id,role_id)
         values(#{userid},#{roleid})
+    </insert>
+
+    <insert id="addRole" parameterType="com.zhou.demo.persist.po.Role">
+         insert into t_role
+        (role_name,statue,remark,create_by,create_time,update_by,update_Time,del_flag)
+        values
+        (#{roleName},#{statue},#{remark},#{createBy},#{createTime},#{updateBy},#{updateTime},#{delFlag})
     </insert>
 
 </mapper>
