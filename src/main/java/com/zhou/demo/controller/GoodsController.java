@@ -1,21 +1,17 @@
 package com.zhou.demo.controller;
 
-import com.zhou.demo.controller.request.RoleRequest;
+import com.zhou.demo.controller.request.GoodsRequest;
 import com.zhou.demo.controller.request.SearchParams;
-import com.zhou.demo.controller.request.UserRequest;
-import com.zhou.demo.controller.response.UserResponse;
 import com.zhou.demo.domain.CommonResult;
-import com.zhou.demo.persist.po.Role;
-import com.zhou.demo.persist.po.User;
-import com.zhou.demo.persist.po.UserStatuePo;
+import com.zhou.demo.persist.po.*;
 import com.zhou.demo.service.GoodsService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @ClassName GoodsController
@@ -31,7 +27,7 @@ public class GoodsController {
     private GoodsService goodsService;
 
     @PreAuthorize("hasAuthority('system:goods:list')")
-    @GetMapping("/goods/querygoodsList")
+    @GetMapping("/goods/queryGoodsList")
     public CommonResult<Map> userList(@RequestParam("keyword") String keyword,
                                       @RequestParam("pagenum") Integer pagenum,
                                       @RequestParam("pagesize") Integer pagesize,
@@ -45,33 +41,25 @@ public class GoodsController {
     }
     @PreAuthorize("hasAuthority('system:goods:list')")
     @PostMapping("/goods/goodsEdit")
-    public CommonResult Editgoods(@RequestBody UserResponse userResponse){
-        User user = new User();
-        //工具类属性赋值
-        BeanUtils.copyProperties(userResponse,user);
-
-        int flag = goodsService.updateGoods(user);
+    public CommonResult Editgoods(@RequestBody GoodsRequest goodsRequest){
+        Goods goods = new Goods();
+        BeanUtils.copyProperties(goodsRequest,goods);
+        String  statue = goodsService.querySataue(goods.getId());
+        if("1".equals(statue)){
+            return new CommonResult(200,"商品已售出，");
+        }
+        int flag = goodsService.editGoods(goods);
         if(flag==0){
             return new CommonResult(200,"更新失败");
         }
         return new CommonResult(200,"更新成功");
     }
 
-//    @GetMapping("/user/UserShow")
-//    public CommonResult<User> UserShow(@RequestBody String id){
-//        User user = goodsService.showUserById(Integer.parseInt(id));
-//        if(Objects.isNull(user)){
-//            return new CommonResult(200,"查询失败");
-//        }
-//        return new CommonResult(200,"查询成功",user);
-//    }
-
-
-    @PostMapping("/goods/addRole")
-    public CommonResult addRole(@RequestBody RoleRequest roleRequest){
-        Role role = new Role();
-        BeanUtils.copyProperties(roleRequest,role);
-        int flag =goodsService.addGoods(role);
+    @PostMapping("/goods/addGoods")
+    public CommonResult addRole(@RequestBody GoodsRequest goodsRequest){
+        Goods goods = new Goods();
+        BeanUtils.copyProperties(goodsRequest,goods);
+        int flag =goodsService.addGoods(goods);
         if(flag==0){
             return new CommonResult(200,"创建失败");
         }
@@ -83,8 +71,10 @@ public class GoodsController {
     @PutMapping("/goods/{id}/statue/{statue}")
     public CommonResult updateStatue(@PathVariable String id,
                                      @PathVariable String statue){
-        UserStatuePo userStatuePo = new UserStatuePo(Integer.parseInt(id),statue);
-        int flag =goodsService.updateStatue(userStatuePo);
+        GoodsStatuePo goodsStatuePo = new GoodsStatuePo();
+        goodsStatuePo.setId(Integer.parseInt(id));
+        goodsStatuePo.setStatue(statue);
+        int flag =goodsService.updateStatue(goodsStatuePo);
         if(flag==0){
             return new CommonResult(200,"修改失败");
         }
@@ -92,9 +82,9 @@ public class GoodsController {
     }
 
     @PreAuthorize("hasAuthority('system:goods:list')")
-    @DeleteMapping("/goods/delUser/{id}")
+    @DeleteMapping("/goods/delGoods/{id}")
     public CommonResult delUser(@PathVariable Integer  id){
-        int flag =goodsService.deleteGoodsById(id);
+        int flag =goodsService.deleteGoods(id);
         if(flag==0){
             return new CommonResult(200,"删除失败");
         }

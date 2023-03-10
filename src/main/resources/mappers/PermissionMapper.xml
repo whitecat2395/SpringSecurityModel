@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.demo.persist.mapper.MenuMapper">
+    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.User">
+        <result column="id" jdbcType="VARCHAR" property="id"></result>
+        <result column="username" jdbcType="VARCHAR" property="userName"></result>
+        <result column="password" jdbcType="VARCHAR" property="passWord"></result>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"></result>
+        <result column="email" jdbcType="VARCHAR" property="email"></result>
+        <result column="phone" jdbcType="VARCHAR" property="phone"></result>
+    </resultMap>
+
+    <select id="queryPermsByUserId" parameterType="java.lang.Integer" resultType="string">
+       select
+        DISTINCT tm.perms
+        from t_user_role tur
+        LEFT JOIN t_role tr ON tur.role_id=tr.id
+        LEFT JOIN t_role_menu trm ON tur.role_id=trm.role_id
+        LEFT JOIN t_menu tm ON trm.menu_id = tm.id
+        where tur.user_id = #{id} AND tr.statue= 0 AND  tm.statue= 0
+    </select>
+
+</mapper>

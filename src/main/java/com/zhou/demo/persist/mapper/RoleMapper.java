@@ -18,7 +18,7 @@ public interface RoleMapper {
 
     Integer queryRoleCount(SearchParams searchParams);
 
-    int updateStatue(RoleStatuePo userStatuePo);
+    int updateStatue(RoleStatuePo roleStatuePo);
 
     int deleteRole(Integer id);
 
