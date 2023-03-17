@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class MenuRequest {
     private Integer id;
-    private String MenuName;
+    private String menuName;
     private String icon;
     private String url;
     private String status;

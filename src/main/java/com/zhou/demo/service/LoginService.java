@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import sun.applet.AppletClassLoader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,6 @@ public class LoginService {
     private RedisTemplate redisTemplate;
 
     public CommonResult<Map<String, String>> loginUser(UserRequest user) {
-
         //AuthenticationManager autheticate进行用户认证
         UsernamePasswordAuthenticationToken uptoken = new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassWord());
         Authentication authenticate = authenticationManager.authenticate(uptoken);

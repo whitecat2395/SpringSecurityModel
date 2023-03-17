@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhou.demo.persist.mapper.MenuMapper">
-    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.User">
-        <result column="id" jdbcType="VARCHAR" property="id"></result>
-        <result column="username" jdbcType="VARCHAR" property="userName"></result>
-        <result column="password" jdbcType="VARCHAR" property="passWord"></result>
-        <result column="role_id" jdbcType="INTEGER" property="roleId"></result>
-        <result column="email" jdbcType="VARCHAR" property="email"></result>
-        <result column="phone" jdbcType="VARCHAR" property="phone"></result>
+    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.Menu">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="menu_name" jdbcType="VARCHAR" property="menuName"></result>
+        <result column="icon" jdbcType="VARCHAR" property="icon"></result>
+        <result column="url" jdbcType="VARCHAR" property="url"></result>
+        <result column="status" jdbcType="VARCHAR" property="status"></result>
+        <result column="perms" jdbcType="VARCHAR" property="perms"></result>
+        <result column="pid" jdbcType="INTEGER" property="pid"></result>
+        <result column="remark" jdbcType="VARCHAR" property="remark"></result>
+        <result column="level" jdbcType="VARCHAR" property="level"></result>
+        <result column="is_link" jdbcType="INTEGER" property="isLink"></result>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"></result>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"></result>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"></result>
+        <result column="del_flag" jdbcType="TIMESTAMP" property="delFlag"></result>
     </resultMap>
 
-    <select id="queryAllUser" resultMap="baseResultMap"  >
-        select * from t_user
-    </select>
+    <insert id="addMenu">
+        insert into t_menu
+        (menu_name,icon,url,status,perms,pid,remark,level,is_link,create_by,create_time,del_flag)
+        values
+        (#{menuName},#{icon},#{url},#{status},#{perms},#{pid},#{remark},#{level},#{isLink},#{createBy},#{createTime},#{delFlag})
+    </insert>
 
     <select id="queryPermsByUserId" parameterType="java.lang.Integer" resultType="string">
        select
@@ -21,18 +33,42 @@
         LEFT JOIN t_role tr ON tur.role_id=tr.id
         LEFT JOIN t_role_menu trm ON tur.role_id=trm.role_id
         LEFT JOIN t_menu tm ON trm.menu_id = tm.id
-        where tur.user_id = #{id} AND tr.statue= 0 AND  tm.statue= 0
+        where tur.user_id = #{id} AND tr.statue= '0' AND  tm.status= '0'
     </select>
 
-    <insert id="insertUser"  parameterType="com.zhou.demo.persist.po.User">
-        insert into t_user
-        (id,username,password,role_id,nick_name,email,phone,freeze,dept_id,remark,insert_time)
-        values
-        (#{id},#{userName},#{passWord},#{roleId},#{nickName},#{email},#{phone},#{freeze},#{deptId},#{remark},#{insertTime})
-    </insert>
+    <update id="updateStatue">
+        update t_menu
+        set
+        status=#{status}
+        where id=#{id}
+    </update>
 
-    <select id="queryUserByName" parameterType="String" resultMap="baseResultMap">
-        select * from t_user where username = #{userName}
+    <update id="deleteMenu">
+        update t_menu
+        set
+        del_flag = #{delFlag}
+        where id=#{id}
+    </update>
+    <update id="updateMenu">
+
+    </update>
+
+
+    <select id="queryAllMenus" resultMap="baseResultMap">
+        select *
+        from t_menu
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">AND menu_name like #{keyword}</if>
+        </where>
+        limit #{pageindex},#{pagesize}
     </select>
-
+    <select id="queryMenuCount" resultType="java.lang.Integer">
+        select count(id)
+        from t_menu
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">AND menu_name like #{keyword}</if>
+        </where>
+    </select>
 </mapper>

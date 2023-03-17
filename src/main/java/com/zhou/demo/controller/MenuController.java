@@ -28,7 +28,7 @@ public class MenuController {
     private MenuService menuService;
 
     @PreAuthorize("hasAuthority('system:menu:list')")
-    @GetMapping("/menu/querymenuList")
+    @GetMapping("/menu/queryMenuList")
     public CommonResult<Map> querymenuList(@RequestParam("keyword") String keyword,
                                       @RequestParam("pagenum") Integer pagenum,
                                       @RequestParam("pagesize") Integer pagesize,
@@ -41,7 +41,7 @@ public class MenuController {
         return new CommonResult<Map>(200,"查询成功",map);
     }
     @PreAuthorize("hasAuthority('system:menu:list')")
-    @PostMapping("/menu/menuEdit")
+    @PostMapping("/menu/EditMenu")
     public CommonResult EditMenu(@RequestBody MenuRequest MenuRequest){
         Menu menu = new Menu();
         BeanUtils.copyProperties(MenuRequest,menu);
@@ -52,7 +52,7 @@ public class MenuController {
         return new CommonResult(200,"更新成功");
 }
 
-    @PostMapping("/goods/addGoods")
+    @PostMapping("/menu/addMenu")
     public CommonResult addRole(@RequestBody MenuRequest MenuRequest){
         Menu menu = new Menu();
         BeanUtils.copyProperties(MenuRequest,menu);

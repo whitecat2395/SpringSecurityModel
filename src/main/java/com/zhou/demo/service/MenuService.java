@@ -36,14 +36,14 @@ public class MenuService {
         Integer pageNum = searchParams.getPagenum();
         Integer pageSize = searchParams.getPagesize();
         searchParams.setPageindex(pageNum==0 ? 0:(pageNum-1)*pageSize);
-        List<Menu> goodsList = mapper.queryAllMenus(searchParams);
+        List<Menu> menuList = mapper.queryAllMenus(searchParams);
         searchParams.setTotal(mapper.queryMenuCount(searchParams));
         HashMap<String, Object> map = new HashMap<>();
         if(keyword!=null){
             searchParams.setKeyword(keyword);
         }
         //装填参数
-        map.put("goodsList",goodsList);
+        map.put("menuList",menuList);
         map.put("SearchParams",searchParams);
         return map;
     }

@@ -33,7 +33,7 @@
         LEFT JOIN t_role tr ON tur.role_id=tr.id
         LEFT JOIN t_role_menu trm ON tur.role_id=trm.role_id
         LEFT JOIN t_menu tm ON trm.menu_id = tm.id
-        where tur.user_id = #{id} AND tr.statue= 0 AND  tm.statue= 0
+        where tur.user_id = #{id} AND tr.statue= '0' AND  tm.status= '0'
     </select>
 
     <update id="updateStatue">
@@ -49,9 +49,12 @@
         del_flag = #{delFlag}
         where id=#{id}
     </update>
+    <update id="updateMenu">
+
+    </update>
 
 
-    <select id="queryAllMenus" resultType="com.zhou.demo.persist.po.Menu">
+    <select id="queryAllMenus" resultMap="baseResultMap">
         select *
         from t_menu
         <where>
