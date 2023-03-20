@@ -36,23 +36,36 @@
         where tur.user_id = #{id} AND tr.statue= '0' AND  tm.status= '0'
     </select>
 
-    <update id="updateStatue">
+    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.MenuStatuePo">
         update t_menu
         set
         status=#{status}
         where id=#{id}
     </update>
 
-    <update id="deleteMenu">
+    <update id="deleteMenu" parameterType="java.lang.Integer">
         update t_menu
         set
         del_flag = #{delFlag}
         where id=#{id}
     </update>
-    <update id="updateMenu">
 
+    <update id="updateMenu" parameterType="com.zhou.demo.persist.po.Menu">
+        /** 修改用户  todo
+         */
+        update t_menu
+        set
+        menu_name=#{menuName},
+        icon=#{icon},
+        url=#{url},
+        perms=#{perms},
+        pid=#{pid},
+        remark=#{remark},
+        level=#{level},
+        update_by=#{updateBy},
+        update_time=#{updateTime}
+        where id=#{id}
     </update>
-
 
     <select id="queryAllMenus" resultMap="baseResultMap">
         select *

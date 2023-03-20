@@ -1,6 +1,11 @@
 package com.zhou.demo.persist.mapper;
 
+import com.zhou.demo.controller.request.SearchParams;
+import com.zhou.demo.persist.po.Permission;
+import com.zhou.demo.persist.po.StatuePo;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @ClassName PermissionMapper
@@ -12,5 +17,17 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface PermissionMapper {
+
+    List<Permission> queryAllPermissions(SearchParams searchParams);
+
+    Integer queryPermissionCount(SearchParams searchParams);
+
+    int updateStatue(StatuePo PermissiontatuePo);
+
+    Integer addPermission(Permission permission);
+
+    int deletePermission(Integer id);
+
+    int updatePermission(Permission permission);
 
 }

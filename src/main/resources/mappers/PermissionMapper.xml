@@ -1,23 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhou.demo.persist.mapper.PermissionMapper">
-    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.User">
-        <result column="id" jdbcType="VARCHAR" property="id"></result>
-        <result column="username" jdbcType="VARCHAR" property="userName"></result>
-        <result column="password" jdbcType="VARCHAR" property="passWord"></result>
-        <result column="role_id" jdbcType="INTEGER" property="roleId"></result>
-        <result column="email" jdbcType="VARCHAR" property="email"></result>
-        <result column="phone" jdbcType="VARCHAR" property="phone"></result>
+    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.Permission">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="permission_name" jdbcType="VARCHAR" property="permissionName"></result>
+        <result column="permission_key" jdbcType="VARCHAR" property="permissionKey"></result>
+        <result column="status" jdbcType="VARCHAR" property="status"></result>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"></result>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"></result>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"></result>
+        <result column="del_flag" jdbcType="TIMESTAMP" property="delFlag"></result>
     </resultMap>
+    <insert id="addPermission" parameterType="com.zhou.demo.persist.po.Permission">
 
-    <select id="queryPermsByUserId" parameterType="java.lang.Integer" resultType="string">
-       select
-        DISTINCT tm.perms
-        from t_user_role tur
-        LEFT JOIN t_role tr ON tur.role_id=tr.id
-        LEFT JOIN t_role_menu trm ON tur.role_id=trm.role_id
-        LEFT JOIN t_menu tm ON trm.menu_id = tm.id
-        where tur.user_id = #{id} AND tr.statue= 0 AND  tm.statue= 0
+
+    </insert>
+    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.StatuePo" >
+        update t_permission
+        set
+        status=#{status}
+        where id=#{id}
+    </update>
+
+    <update id="deletePermission" parameterType="java.lang.Integer">
+        update t_permission
+        set
+        del_flag = #{delFlag}
+        where id=#{id}
+    </update>
+    <update id="updatePermission">
+        update t_permission
+        set
+        permission_name=#{permissionName},
+        permission_key=#{permissionKey},
+        updateTime=#{updateTime},
+        updateBy=#{updateBy}
+        where id=#{id}
+    </update>
+
+    <select id="queryAllPermissions" resultType="com.zhou.demo.persist.po.Permission">
+        select *
+        from t_permission
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">AND permission_name like #{keyword}</if>
+        </where>
+        limit #{pageindex},#{pagesize}
+    </select>
+    <select id="queryPermissionCount" resultType="java.lang.Integer">
+        select count(id)
+        from t_permission
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">AND permission_name like #{keyword}</if>
+        </where>
     </select>
 
 </mapper>

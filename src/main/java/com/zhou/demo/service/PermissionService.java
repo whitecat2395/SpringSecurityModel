@@ -2,32 +2,33 @@ package com.zhou.demo.service;
 
 import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.domain.LoginUser;
-import com.zhou.demo.persist.mapper.MenuMapper;
-import com.zhou.demo.persist.po.Goods;
-import com.zhou.demo.persist.po.GoodsStatuePo;
-import com.zhou.demo.persist.po.Menu;
-import com.zhou.demo.persist.po.MenuStatuePo;
+import com.zhou.demo.persist.mapper.PermissionMapper;
+import com.zhou.demo.persist.po.Permission;
+import com.zhou.demo.persist.po.StatuePo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * @ClassName MenuService
+ * @ClassName PermissionService
  * @Author
- * @Date 2023/3/10 14:27
+ * @Date 2023/3/17 16:06
  * @Version
  * @Description
  */
 
 @Service
-public class MenuService {
-
+public class PermissionService {
     @Autowired
-    private MenuMapper mapper;
-    public Map queryAllMenu(SearchParams searchParams) {
+    private PermissionMapper mapper;
+
+    public Map queryAllPermission(SearchParams searchParams) {
         //判断page大小和起始位置
         String keyword=searchParams.getKeyword();
         if(keyword != "") {
@@ -36,47 +37,47 @@ public class MenuService {
         Integer pageNum = searchParams.getPagenum();
         Integer pageSize = searchParams.getPagesize();
         searchParams.setPageindex(pageNum==0 ? 0:(pageNum-1)*pageSize);
-        List<Menu> menuList = mapper.queryAllMenus(searchParams);
-        searchParams.setTotal(mapper.queryMenuCount(searchParams));
+        List<Permission> PermissionList = mapper.queryAllPermissions(searchParams);
+        searchParams.setTotal(mapper.queryPermissionCount(searchParams));
         HashMap<String, Object> map = new HashMap<>();
         if(keyword!=null){
             searchParams.setKeyword(keyword);
         }
         //装填参数
-        map.put("menuList",menuList);
+        map.put("PermissionList",PermissionList);
         map.put("SearchParams",searchParams);
         return map;
     }
 
-    public int addMenu(Menu menu) {
+    public int addPermission(Permission permission) {
         //填充Role
         //从handler中获取当前用户的信息
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser= (LoginUser)authentication.getPrincipal();
         Integer userId = loginUser.getUser().getId();
         //0为使用状态
-        menu.setCreateTime(new Date());
-        menu.setDelFlag(false);
-        menu.setStatus("0");
-        Integer flag = mapper.addMenu(menu);
+        permission.setCreateTime(new Date());
+        permission.setDelFlag(false);
+        permission.setStatus("0");
+        Integer flag = mapper.addPermission(permission);
         if(flag==0){
             return flag;
         }
         return flag;
     }
 
-    public int updateStatue(MenuStatuePo menuStatuePo) {
-        return mapper.updateStatue(menuStatuePo);
+    public int updateStatue(StatuePo permissionStatuePo) {
+        return mapper.updateStatue(permissionStatuePo);
     }
 
-    public int deleteMenu(Integer id) {
-        return mapper.deleteMenu(id);
+    public int deletePermission(Integer id) {
+        return mapper.deletePermission(id);
     }
 
-    public int editMenu(Menu menu) {
+    public int editPermission(Permission permission) {
         Date date = new Date();
-        menu.setUpdateTime(date);
-        menu.setUpdateBy(001);
-        return mapper.updateMenu(menu);
+        permission.setUpdateTime(date);
+        permission.setUpdateBy(0001);
+        return mapper.updatePermission(permission);
     }
 }

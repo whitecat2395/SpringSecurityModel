@@ -1,6 +1,5 @@
 package com.zhou.demo.persist.po;
 
-import com.alibaba.druid.filter.AutoLoad;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,26 +9,21 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @ClassName Menus
+ * @ClassName Permission
  * @Author
- * @Date 2023/3/10 14:38
+ * @Date 2023/3/17 16:13
  * @Version
  * @Description
  */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Menu {
+public class Permission {
     private Integer id;
-    private String menuName;
-    private String icon;
-    private String url;
+    private String permissionName;
+    private String permissionKey;
     private String status;
-    private String perms;
-    private Integer pid;
-    private String remark;
-    private Integer level;
-    private Integer isLink;
     private Integer createBy;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

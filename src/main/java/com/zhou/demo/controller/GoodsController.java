@@ -46,7 +46,7 @@ public class GoodsController {
         BeanUtils.copyProperties(goodsRequest,goods);
         String  statue = goodsService.querySataue(goods.getId());
         if("1".equals(statue)){
-            return new CommonResult(200,"商品已售出，");
+            return new CommonResult(200,"商品已售出,无法修改");
         }
         int flag = goodsService.editGoods(goods);
         if(flag==0){
