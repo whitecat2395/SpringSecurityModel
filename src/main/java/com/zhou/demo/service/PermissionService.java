@@ -44,7 +44,7 @@ public class PermissionService {
             searchParams.setKeyword(keyword);
         }
         //装填参数
-        map.put("PermissionList",PermissionList);
+        map.put("permissionList",PermissionList);
         map.put("SearchParams",searchParams);
         return map;
     }

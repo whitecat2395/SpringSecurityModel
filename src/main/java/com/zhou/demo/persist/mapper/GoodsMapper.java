@@ -3,8 +3,6 @@ package com.zhou.demo.persist.mapper;
 import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.persist.po.Goods;
 import com.zhou.demo.persist.po.GoodsStatuePo;
-import com.zhou.demo.persist.po.Role;
-import com.zhou.demo.persist.po.RoleStatuePo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -28,7 +26,7 @@ public interface GoodsMapper {
 
     Integer updateStatue(GoodsStatuePo goodsStatuePo);
 
-    Integer deleteGoods(Integer id);
+    Integer deleteGoods(Integer id,Integer userId);
 
     Integer updateGoods(Goods goods);
 
@@ -36,6 +34,5 @@ public interface GoodsMapper {
 
     Integer connectUserAndGoods(Integer goodsId, Integer userId);
 
-    String  queryGoodsStatue(Integer id);
-
+    String  queryGoodsStatue(Integer id,Integer userId);
 }

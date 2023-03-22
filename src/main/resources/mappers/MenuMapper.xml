@@ -46,7 +46,7 @@
     <update id="deleteMenu" parameterType="java.lang.Integer">
         update t_menu
         set
-        del_flag = #{delFlag}
+        del_flag = 1
         where id=#{id}
     </update>
 

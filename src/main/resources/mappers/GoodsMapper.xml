@@ -30,10 +30,17 @@
         update t_goods
         set
         sell_status=#{statue}
-        where id=#{id}
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                AND user_id=#{userId}
+            </if>
+        </where>
     </update>
 
-    <update id="updateGoods" parameterType="com.zhou.demo.persist.po.Goods" >
+    <update id="updateGoods" parameterType="com.zhou.demo.persist.po.Goods">
         update t_goods
         set
         category_id=#{categoryId},
@@ -44,14 +51,28 @@
         goods_number=#{goodsNumber},
         picture=#{picture},
         update_time=#{updateTime}
-        where id=#{id}
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                and user_id=#{userId}
+            </if>
+        </where>
     </update>
 
     <delete id="deleteGoods" parameterType="java.lang.Integer">
         update t_goods
         set
-        del_flag = #{delFlag}
-        where id=#{id}
+        del_flag = 1
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                and user_id=#{userId}
+            </if>
+        </where>
     </delete>
 
     <select id="queryAllGoods" resultMap="baseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
@@ -59,7 +80,12 @@
         from t_goods
         <where>
             del_flag = 0
-            <if test="keyword != null and keyword != ''">AND goods_name like #{keyword}</if>
+            <if test="keyword != null and keyword != ''">
+                AND goods_name like #{keyword}
+            </if>
+            <if test="userId != null">
+                AND user_id=#{userId}
+            </if>
         </where>
         limit #{pageindex},#{pagesize}
     </select>
@@ -70,7 +96,12 @@
         from t_goods
         <where>
             del_flag = 0
-            <if test="keyword != null and keyword != ''">AND goods_name like #{keyword}</if>
+            <if test="keyword != null and keyword != ''">
+                AND goods_name like #{keyword}
+            </if>
+            <if test="userId !=null">
+                AND user_id=#{userId}
+            </if>
         </where>
     </select>
     <select id="queryGoodsByKey" parameterType="com.zhou.demo.persist.po.GoodsStatuePo" resultType="java.lang.Integer">
@@ -78,10 +109,17 @@
          from t_goods
          where uukey = #{uuKey} and user_id=#{userId}
     </select>
-    <select id="queryGoodsStatue" resultType="java.lang.String">
+    <select id="queryGoodsStatue" resultType="java.lang.String" parameterType="java.lang.Integer">
         select sell_status
         from t_goods
-        where id=#{id}
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                AND user_id=#{userId}
+            </if>
+        </where>
     </select>
 
     <insert id="connectUserAndGoods" parameterType="java.lang.Integer">

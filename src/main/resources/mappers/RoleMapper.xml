@@ -30,7 +30,7 @@
     <delete id="deleteRole" parameterType="java.lang.Integer">
         update t_role
         set
-        del_flag = #{delFlag}
+        del_flag = 1
         where id=#{id}
     </delete>
 

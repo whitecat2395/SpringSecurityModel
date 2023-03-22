@@ -38,4 +38,6 @@ public class SearchParams {
      */
     private Integer total;
 
+    private Integer userId;
+
 }

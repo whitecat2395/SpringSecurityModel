@@ -21,5 +21,4 @@ public class GoodsStatuePo {
     private String statue;
     private String uuKey;
     private Integer userId;
-
 }

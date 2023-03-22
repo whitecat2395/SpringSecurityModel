@@ -13,8 +13,10 @@
         <result column="del_flag" jdbcType="TIMESTAMP" property="delFlag"></result>
     </resultMap>
     <insert id="addPermission" parameterType="com.zhou.demo.persist.po.Permission">
-
-
+        insert into t_permission
+        (permission_name,permission_key,status,create_by,create_time,del_flag)
+        values
+        (#{permissionName},#{permissionKey},#{status},#{createBy},#{createTime},#{delFlag})
     </insert>
     <update id="updateStatue" parameterType="com.zhou.demo.persist.po.StatuePo" >
         update t_permission
@@ -34,12 +36,12 @@
         set
         permission_name=#{permissionName},
         permission_key=#{permissionKey},
-        updateTime=#{updateTime},
-        updateBy=#{updateBy}
+        update_time=#{updateTime},
+        update_by=#{updateBy}
         where id=#{id}
     </update>
 
-    <select id="queryAllPermissions" resultType="com.zhou.demo.persist.po.Permission">
+    <select id="queryAllPermissions" resultMap="baseResultMap">
         select *
         from t_permission
         <where>
@@ -56,5 +58,4 @@
             <if test="keyword != null and keyword != ''">AND permission_name like #{keyword}</if>
         </where>
     </select>
-
 </mapper>
