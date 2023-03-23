@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.demo.persist.mapper.OrderMapper">
+    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.Order">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="user_id" jdbcType="INTEGER" property="userId"></result>
+        <result column="express_id" jdbcType="INTEGER" property="expressId"></result>
+        <result column="order_price" jdbcType="INTEGER" property="orderPrice"></result>
+        <result column="remark" jdbcType="INTEGER" property="remark"></result>
+        <result column="status" jdbcType="INTEGER" property="status"></result>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+        <result column="over_time" jdbcType="TIMESTAMP" property="createTime"></result>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"></result>
+        <result column="del_flag" jdbcType="TIMESTAMP" property="delFlag"></result>
+    </resultMap>
+
+    <insert id="addOrder" parameterType="com.zhou.demo.persist.po.Order">
+        insert into t_order
+        (category_id,user_id,uukey,Order_name,price,original_price,Order_detail,Order_number,heat,picture,sell_status,create_time,del_flag)
+        values
+        (#{categoryId},#{userId},#{uukey},#{OrderName},#{price},#{originalPrice},#{OrderDetail},#{OrderNumber},#{heat},#{picture},#{sellStatus},#{createTime},#{delFlag})
+    </insert>
+
+    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.StatuePo">
+        update t_order
+        set
+        status=#{statue}
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                AND user_id=#{userId}
+            </if>
+        </where>
+    </update>
+
+    <update id="updateOrder" parameterType="com.zhou.demo.persist.po.Order">
+        update t_order
+        set
+        update_time=#{updateTime}
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                and user_id=#{userId}
+            </if>
+        </where>
+    </update>
+
+    <delete id="deleteOrder" parameterType="java.lang.Integer">
+        update t_order
+        set
+        del_flag = 1
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                and user_id=#{userId}
+            </if>
+        </where>
+    </delete>
+
+    <select id="queryAllOrder" resultMap="baseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
+        select *
+        from t_order
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">
+                AND Order_name like #{keyword}
+            </if>
+            <if test="userId != null">
+                AND user_id=#{userId}
+            </if>
+        </where>
+        limit #{pageindex},#{pagesize}
+    </select>
+
+    <select id="queryOrderCount" resultType="java.lang.Integer" parameterType="com.zhou.demo.controller.request.SearchParams">
+        select count(id)
+        from t_order
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">
+                AND Order_name like #{keyword}
+            </if>
+            <if test="userId !=null">
+                AND user_id=#{userId}
+            </if>
+        </where>
+    </select>
+    <select id="queryOrderByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+         select id
+         from t_order
+         where user_id=#{userId}
+    </select>
+    <select id="queryOrderStatue" resultType="java.lang.String" parameterType="java.lang.Integer">
+        select status
+        from t_order
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+        </where>
+    </select>
+
+    <insert id="connectUserAndOrder" parameterType="java.lang.Integer">
+        insert into t_user_Order
+        (user_id,order_id)
+        values(#{userId},#{OrderId})
+    </insert>
+
+</mapper>

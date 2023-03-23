@@ -18,4 +18,5 @@ import lombok.NoArgsConstructor;
 public class StatuePo {
         private Integer id;
         private String status;
+        private Integer userId;
 }
