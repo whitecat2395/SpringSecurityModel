@@ -21,7 +21,7 @@ import java.util.Map;
  * @Description 卖家商品展示
  */
 @RestController
-public class selgoodsController {
+public class SelgoodsController {
 
     @Autowired
     private GoodsService goodsService;
