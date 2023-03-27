@@ -39,6 +39,7 @@ public class selgoodsController {
         Map map = goodsService.queryAllGoodsBySelUser(searchParams);
         return new CommonResult<Map>(200, "查询成功", map);
     }
+
     @PreAuthorize("hasAuthority('system:goods:list')")
     @PostMapping("/selgoods/goodsEdit")
     public CommonResult Editgoods(@RequestBody GoodsRequest goodsRequest) {
@@ -65,7 +66,6 @@ public class selgoodsController {
         }
         return new CommonResult(200, "创建成功");
     }
-
 
     @PreAuthorize("hasAuthority('system:goods:list')")
     @PutMapping("/selgoods/{id}/statue/{statue}")

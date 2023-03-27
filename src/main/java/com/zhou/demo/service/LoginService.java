@@ -12,10 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import sun.applet.AppletClassLoader;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class LoginService {
@@ -45,7 +45,7 @@ public class LoginService {
         Map<String, String> map = new HashMap<>();
         map.put("token",jwt);
         //把完整的用户信息存入redis中 userid作为key。
-        redisTemplate.opsForValue().set("login:"+userid,loginUser);
+        redisTemplate.opsForValue().set("login:"+userid,loginUser,12, TimeUnit.HOURS);
         return new CommonResult<>(200,"登录成功",map);
     }
 

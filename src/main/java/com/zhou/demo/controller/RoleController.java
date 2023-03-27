@@ -29,8 +29,6 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-
-
     @GetMapping("/role/queryRoleList")
     public CommonResult<Map>  roleList(@RequestParam("keyword") String keyword,
                                  @RequestParam("pagenum") Integer pagenum,
