@@ -131,7 +131,7 @@ public class OrderService {
         return mapper.updateOrder(order);
     }
 
-    public int addOrderByUser(Order order) {
+    public int addOrderBySelUser(Order order) {
         //填充Role
         //从handler中获取当前用户的信息
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -155,7 +155,7 @@ public class OrderService {
 
     }
 
-    public int updateStatueByUser(StatuePo orderStatuePo) {
+    public int updateStatueBySelUser(StatuePo orderStatuePo) {
         //从handler中获取当前用户的信息
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser= (LoginUser)authentication.getPrincipal();

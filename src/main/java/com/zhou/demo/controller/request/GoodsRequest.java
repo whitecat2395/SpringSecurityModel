@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -17,7 +18,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GoodsRequest {
+public class GoodsRequest  implements Serializable {
 
     private Integer id;
     /**

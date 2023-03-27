@@ -1,5 +1,11 @@
 package com.zhou.demo.controller.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
 /**
  * @ClassName OrderRequest
  * @Author
@@ -7,7 +13,9 @@ package com.zhou.demo.controller.request;
  * @Version
  * @Description
  */
-
-public class OrderRequest {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class OrderRequest implements Serializable {
 
 }
