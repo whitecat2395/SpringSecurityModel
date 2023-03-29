@@ -2,8 +2,10 @@ package com.zhou.demo.service;
 
 import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.domain.LoginUser;
+import com.zhou.demo.persist.mapper.OrderDetailMapper;
 import com.zhou.demo.persist.mapper.OrderMapper;
 import com.zhou.demo.persist.po.Order;
+import com.zhou.demo.persist.po.OrderDetail;
 import com.zhou.demo.persist.po.StatuePo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,9 @@ public class OrderService {
 
     @Autowired
     private OrderMapper mapper;
+
+    @Autowired
+    private OrderDetailMapper OrderDetailmapper;
 
     public Map<String,Object> queryAllOrder(SearchParams searchParams) {
         //判断page大小和起始位置
@@ -101,8 +106,8 @@ public class OrderService {
         Integer pageSize = searchParams.getPagesize();
         searchParams.setPageindex(pageNum==0 ? 0:(pageNum-1)*pageSize);
         searchParams.setUserId(userId);
-        List<Order> orderList = mapper.queryAllOrder(searchParams);
-        searchParams.setTotal(mapper.queryOrderCount(searchParams));
+        List<OrderDetail> orderList = OrderDetailmapper.queryAllOrder(searchParams);
+        searchParams.setTotal(OrderDetailmapper.queryOrderCount(searchParams));
         HashMap<String, Object> map = new HashMap<>();
         if(keyword!=null){
             searchParams.setKeyword(keyword);

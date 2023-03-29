@@ -1,8 +1,12 @@
 package com.zhou.demo.persist.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 /**
  * @ClassName orderDetail
@@ -21,9 +25,20 @@ public class OrderDetail {
     private Integer goodsId;
     private Integer sellerId;
     private Integer expressId;
-    private Integer expressName;
-    private Integer goodsImg;
+    private String  expressName;
+    private String  goodsImg;
     private Integer buyCount;
     private Integer goodsPrice;
-    private Integer goodsName;
+    private String  goodsName;
+    private String status;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date coverTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
+    private Boolean delFlag;
 }

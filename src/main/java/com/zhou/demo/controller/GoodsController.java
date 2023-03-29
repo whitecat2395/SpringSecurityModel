@@ -26,6 +26,7 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
+
     @PreAuthorize("hasAuthority('system:goods:list')")
     @GetMapping("/goods/queryGoodsList")
     public CommonResult<Map> userList(@RequestParam("keyword") String keyword,
