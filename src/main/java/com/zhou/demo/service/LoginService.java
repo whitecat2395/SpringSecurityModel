@@ -35,7 +35,6 @@ public class LoginService {
             throw new RuntimeException("登录失败");
 //            return new CommonResult(200,"登录失败");
         }
-
         //如果认证通过，使用userid生成一个jwt、
         LoginUser loginUser =(LoginUser) authenticate.getPrincipal();
         String userid = loginUser.getUser().getId().toString();

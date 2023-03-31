@@ -182,4 +182,25 @@ public class GoodsService {
         Integer userId = loginUser.getUser().getId();
         return mapper.deleteGoods(id,userId);
     }
+
+    public Map queryGoodsByCategoryId(SearchParams searchParams) {
+        //判断page大小和起始位置
+        String keyword=searchParams.getKeyword();
+        if(keyword != "") {
+            searchParams.setKeyword("%"+keyword+"%");
+        }
+        Integer pageNum = searchParams.getPagenum();
+        Integer pageSize = searchParams.getPagesize();
+        searchParams.setPageindex(pageNum==0 ? 0:(pageNum-1)*pageSize);
+        List<Goods> tableData = mapper.queryAllGoods(searchParams);
+        searchParams.setTotal(mapper.queryGoodsCount(searchParams));
+        HashMap<String, Object> map = new HashMap<>();
+        if(keyword!=null){
+            searchParams.setKeyword(keyword);
+        }
+        //装填参数
+        map.put("tableData",tableData);
+        map.put("SearchParams",searchParams);
+        return map;
+    }
 }

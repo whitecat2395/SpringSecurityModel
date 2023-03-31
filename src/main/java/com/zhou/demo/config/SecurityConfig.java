@@ -14,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.Collections;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -47,8 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 //对于登录接口允许匿名访问
-                .antMatchers("/hello","/user/addUser").permitAll()
-                .antMatchers("/user/login").anonymous()
+                .antMatchers("/hello","/user/addUser","/image/*").permitAll()
+                .antMatchers("/user/login","/image/goods").anonymous()
                 //除上面外的所有请求都需要鉴权认证。
                 .anyRequest().authenticated();
 //                // 跨域配置1
@@ -77,5 +76,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        source.registerCorsConfiguration("/**", corsConfiguration);
 //        return source;
 //    }
-
 }

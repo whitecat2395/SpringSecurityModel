@@ -23,6 +23,7 @@ import java.util.Map;
 
 @RestController
 public class GoodsController {
+
     @Autowired
     private GoodsService goodsService;
 
@@ -40,6 +41,7 @@ public class GoodsController {
         Map map= goodsService.queryAllGoods(searchParams);
         return new CommonResult<Map>(200,"查询成功",map);
     }
+
     @PreAuthorize("hasAuthority('system:goods:list')")
     @PostMapping("/goods/goodsEdit")
     public CommonResult Editgoods(@RequestBody GoodsRequest goodsRequest){
