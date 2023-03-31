@@ -20,5 +20,7 @@ import javax.xml.xpath.XPath;
 @NoArgsConstructor
 public class Photo {
     private String id;
+    private Integer goodsId;
+    private String photoName;
     private String path;
 }

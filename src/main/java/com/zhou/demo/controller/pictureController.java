@@ -7,6 +7,7 @@ import com.zhou.demo.utils.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,38 +38,45 @@ public class pictureController {
     private PhotoService photoService;
 
 
-    @PostMapping("/images")
-    public CommonResult addArticle(@RequestBody MultipartFile mfile){
+    @PostMapping("/images/uploadFile")
+    public CommonResult<Map> addArticle(@RequestParam(value = "file") MultipartFile mfile){
         if(mfile == null) {
+            System.out.println("没有上传缩略图!");
             return new CommonResult<>(200,"没有上传缩略图!");
         }
         //获取后缀
         String suffixName = ImageUtil.getImagePath(mfile);
-        //获取新的文件名
+        //拼接新的文件名
         String newFileName = ImageUtil.getNewFileName(suffixName);
+        //图片地址
+        String newImagePath = ImageUtil.getNewImagePath(newFileName);
         //保存图片
-        File file = new File(ImageUtil.getNewImagePath(newFileName));
+        File file = new File(newImagePath);
+        System.out.println(newFileName);
         boolean state = ImageUtil.saveImage(mfile, file);
         if(state) {
             //图片保存成功
             //设置图片到对象
             Photo photo =new Photo();
-            photo.setPath(ImageUtil.getNewImagePath(newFileName));
+            photo.setPhotoName(newFileName);
+            photo.setPath(newImagePath);
             //保存对象
             int row = photoService.addPhoto(photo);
-            if(row>0) {
-                new CommonResult<>(200,"图片上传成功");
+            System.out.println("图片插入成功:"+row);
+            if(row > 0) {
+                Map<String,String> map =new HashMap<String,String>();
+                map.put("pictureName",newFileName);
+                return new CommonResult<>(200,"图片上传成功",map);
             }else {
                 //TODO 数据库插入失败，删除本地图片
-
-                new CommonResult<>(200,"图片上传失败");
+                return new CommonResult<>(200,"图片上传失败1");
             }
         }
-        return new CommonResult<>(200,"图片上传失败");
+        return new CommonResult<>(200,"图片上传失败2");
     }
 
 
-    @RequestMapping(path = "/image/{filename}", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
+    @RequestMapping(path = "/images/{filename}", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
             MediaType.IMAGE_PNG_VALUE })
     public BufferedImage getImage(@PathVariable("filename") String filename) throws IOException, IOException {
         // 首先组合文件对象http://localhost:9090/image/phone3.jpg

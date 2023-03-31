@@ -3,13 +3,15 @@
 <mapper namespace="com.zhou.demo.persist.mapper.PhotoMapper">
     <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.Photo">
         <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"></result>
+        <result column="photo_name" jdbcType="VARCHAR" property="photoName"></result>
         <result column="path" jdbcType="VARCHAR" property="path"></result>
     </resultMap>
-    <insert id="addPhoto">
+    <insert id="addPhoto"  parameterType="com.zhou.demo.persist.po.Photo">
         insert into t_photo
-        (id,path)
+        (photo_name,path)
         values
-        (#{id},#{path})
+        (#{photoName},#{path})
     </insert>
 
 </mapper>
