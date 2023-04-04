@@ -38,7 +38,7 @@ public class pictureController {
     private PhotoService photoService;
 
 
-    @PostMapping("/images/uploadFile")
+    @PostMapping("/image/uploadFile")
     public CommonResult<Map> addArticle(@RequestParam(value = "file") MultipartFile mfile){
         if(mfile == null) {
             System.out.println("没有上传缩略图!");
@@ -76,7 +76,7 @@ public class pictureController {
     }
 
 
-    @RequestMapping(path = "/images/{filename}", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
+    @RequestMapping(path = "/image/{filename}", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
             MediaType.IMAGE_PNG_VALUE })
     public BufferedImage getImage(@PathVariable("filename") String filename) throws IOException, IOException {
         // 首先组合文件对象http://localhost:9090/image/phone3.jpg
