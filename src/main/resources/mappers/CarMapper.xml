@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.demo.persist.mapper.CarMapper">
+    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.Goods">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="category_id" jdbcType="INTEGER" property="categoryId"></result>
+        <result column="user_id" jdbcType="INTEGER" property="userId"></result>
+        <result column="uukey" jdbcType="VARCHAR" property="uukey"></result>
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName"></result>
+        <result column="price" jdbcType="DOUBLE" property="price"></result>
+        <result column="original_price" jdbcType="DOUBLE" property="originalPrice"></result>
+        <result column="goods_detail" jdbcType="VARCHAR" property="goodsDetail"></result>
+        <result column="goods_number" jdbcType="INTEGER" property="goodsNumber"></result>
+        <result column="heat" jdbcType="INTEGER" property="heat"></result>
+        <result column="picture" jdbcType="VARCHAR" property="picture"></result>
+        <result column="sell_status" jdbcType="TINYINT" property="sellStatus"></result>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"></result>
+        <result column="del_flag" jdbcType="TIMESTAMP" property="delFlag"></result>
+    </resultMap>
+
+    <insert id="addGoods" parameterType="com.zhou.demo.persist.po.Goods">
+        insert into t_Car
+        (category_id,user_id,uukey,goods_name,price,original_price,goods_detail,goods_number,heat,picture,sell_status,create_time,del_flag)
+        values
+        (#{categoryId},#{userId},#{uukey},#{goodsName},#{price},#{originalPrice},#{goodsDetail},#{goodsNumber},#{heat},#{picture},#{sellStatus},#{createTime},#{delFlag})
+    </insert>
+
+    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.GoodsStatuePo">
+        update t_goods
+        set
+        sell_status=#{statue}
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                AND user_id=#{userId}
+            </if>
+        </where>
+    </update>
+
+    <update id="updateGoods" parameterType="com.zhou.demo.persist.po.Goods">
+        update t_goods
+        set
+        category_id=#{categoryId},
+        goods_name=#{goodsName},
+        price=#{price},
+        original_price=#{originalPrice},
+        goods_detail=#{goodsDetail},
+        goods_number=#{goodsNumber},
+        picture=#{picture},
+        update_time=#{updateTime}
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                and user_id=#{userId}
+            </if>
+        </where>
+    </update>
+
+    <delete id="deleteGoods" parameterType="java.lang.Integer">
+        update t_goods
+        set
+        del_flag = 1
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                and user_id=#{userId}
+            </if>
+        </where>
+    </delete>
+
+    <select id="queryAllGoods" resultMap="baseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
+        select *
+        from t_goods
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">
+                AND goods_name like #{keyword}
+            </if>
+            <if test="userId != null">
+                AND user_id=#{userId}
+            </if>
+        </where>
+        limit #{pageindex},#{pagesize}
+    </select>
+
+    <select id="queryGoodsCount" resultType="java.lang.Integer"
+            parameterType="com.zhou.demo.controller.request.SearchParams">
+        select count(id)
+        from t_goods
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">
+                AND goods_name like #{keyword}
+            </if>
+            <if test="userId !=null">
+                AND user_id=#{userId}
+            </if>
+        </where>
+    </select>
+    <select id="queryGoodsByKey" parameterType="com.zhou.demo.persist.po.GoodsStatuePo" resultType="java.lang.Integer">
+         select id
+         from t_goods
+         where uukey = #{uuKey} and user_id=#{userId}
+    </select>
+    <select id="queryGoodsStatue" resultType="java.lang.String" parameterType="java.lang.Integer">
+        select sell_status
+        from t_goods
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="userId !=null">
+                AND user_id=#{userId}
+            </if>
+        </where>
+    </select>
+    <select id="selectCarByUserId" resultType="com.zhou.demo.persist.po.Goods">
+        select
+        *
+        from t_car tc
+        left join t_car_goods tcg on tc.id=tcg.carid
+        left join t_goods tg on tcg.goodsid=tg.id
+        where tc.userid=#{userId}AND del_flag=0;
+    </select>
+
+    <select id="selectCarCountByUserId" resultType="java.lang.Integer">
+        select
+        count(tc.goodsid)
+        from t_car tc
+        left join t_car_goods tcg on tc.id=tcg.carid
+        where tc.userid=#{userId}AND del_flag=0;
+    </select>
+
+    <insert id="connectUserAndGoods" parameterType="java.lang.Integer">
+        insert into t_user_goods
+        (user_id,goods_id)
+        values(#{userId},#{goodsId})
+    </insert>
+
+</mapper>
