@@ -77,32 +77,32 @@ public class pictureController {
 
 
     @RequestMapping(path = "/image/{filename}", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
-            MediaType.IMAGE_PNG_VALUE })
-    public BufferedImage getImage(@PathVariable("filename") String filename) throws IOException, IOException {
-        // 首先组合文件对象http://localhost:9090/image/phone3.jpg
-        String FilePath = ImageUtil.getNewImagePath(filename);
-        byte[] bytes = null;
-        bytes = (byte[]) redisTemplate.opsForValue().get(filename);
-        if(!ObjectUtils.isEmpty(bytes)){
-            System.out.println("从redis缓存读取"+filename+"图片成功");
-            BufferedImage image = ByteArrayTobufferedImage(bytes);
-            return image;
-        }
-        System.out.println("FilePath==="+FilePath);
-        File file = new File("D:/image/",filename);
-        // 判断文件是否存在
-        if (file.exists()) {
-            // 读取文件流，用文件流创建图片，这里也可以通过ImageIO直接读取文件
-            FileInputStream in = new FileInputStream(file);
-            BufferedImage image = ImageIO.read(in);
-            in.close();
-            bytes = bufferedImageToByteArray(image);
-            redisTemplate.opsForValue().set(filename,bytes,12,TimeUnit.HOURS);
-            return image;
-        } else {
-            // 如果不存在返回空
-            return null;
-        }
+                MediaType.IMAGE_PNG_VALUE })
+        public BufferedImage getImage(@PathVariable("filename") String filename) throws IOException, IOException {
+            // 首先组合文件对象http://localhost:9090/image/phone3.jpg
+            String FilePath = ImageUtil.getNewImagePath(filename);
+            byte[] bytes = null;
+            bytes = (byte[]) redisTemplate.opsForValue().get(filename);
+            if(!ObjectUtils.isEmpty(bytes)){
+                System.out.println("从redis缓存读取"+filename+"图片成功");
+                BufferedImage image = ByteArrayTobufferedImage(bytes);
+                return image;
+            }
+            System.out.println("FilePath==="+FilePath);
+            File file = new File("D:/image/",filename);
+            // 判断文件是否存在
+            if (file.exists()) {
+                // 读取文件流，用文件流创建图片，这里也可以通过ImageIO直接读取文件
+                FileInputStream in = new FileInputStream(file);
+                BufferedImage image = ImageIO.read(in);
+                in.close();
+                bytes = bufferedImageToByteArray(image);
+                redisTemplate.opsForValue().set(filename,bytes,12,TimeUnit.HOURS);
+                return image;
+            } else {
+                // 如果不存在返回空
+                return null;
+            }
     }
 
     @RequestMapping("/addimage")

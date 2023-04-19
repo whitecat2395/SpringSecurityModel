@@ -26,101 +26,7 @@
         (#{categoryId},#{userId},#{uukey},#{goodsName},#{price},#{originalPrice},#{goodsDetail},#{goodsNumber},#{heat},#{picture},#{sellStatus},#{createTime},#{delFlag})
     </insert>
 
-    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.GoodsStatuePo">
-        update t_goods
-        set
-        sell_status=#{statue}
-        <where>
-            <if test="id!=null">
-                id=#{id}
-            </if>
-            <if test="userId !=null">
-                AND user_id=#{userId}
-            </if>
-        </where>
-    </update>
 
-    <update id="updateGoods" parameterType="com.zhou.demo.persist.po.Goods">
-        update t_goods
-        set
-        category_id=#{categoryId},
-        goods_name=#{goodsName},
-        price=#{price},
-        original_price=#{originalPrice},
-        goods_detail=#{goodsDetail},
-        goods_number=#{goodsNumber},
-        picture=#{picture},
-        update_time=#{updateTime}
-        <where>
-            <if test="id!=null">
-                id=#{id}
-            </if>
-            <if test="userId !=null">
-                and user_id=#{userId}
-            </if>
-        </where>
-    </update>
-
-    <delete id="deleteGoods" parameterType="java.lang.Integer">
-        update t_goods
-        set
-        del_flag = 1
-        <where>
-            <if test="id!=null">
-                id=#{id}
-            </if>
-            <if test="userId !=null">
-                and user_id=#{userId}
-            </if>
-        </where>
-    </delete>
-
-    <select id="queryAllGoods" resultMap="baseResultMap" parameterType="com.zhou.demo.controller.request.SearchParams">
-        select *
-        from t_goods
-        <where>
-            del_flag = 0
-            <if test="keyword != null and keyword != ''">
-                AND goods_name like #{keyword}
-            </if>
-            <if test="userId != null">
-                AND user_id=#{userId}
-            </if>
-        </where>
-        limit #{pageindex},#{pagesize}
-    </select>
-
-    <select id="queryGoodsCount" resultType="java.lang.Integer"
-            parameterType="com.zhou.demo.controller.request.SearchParams">
-        select count(id)
-        from t_goods
-        <where>
-            del_flag = 0
-            <if test="keyword != null and keyword != ''">
-                AND goods_name like #{keyword}
-            </if>
-            <if test="userId !=null">
-                AND user_id=#{userId}
-            </if>
-        </where>
-    </select>
-    <select id="queryGoodsByKey" parameterType="com.zhou.demo.persist.po.GoodsStatuePo" resultType="java.lang.Integer">
-         select id
-         from t_goods
-         where uukey = #{uuKey} and user_id=#{userId}
-    </select>
-    <select id="queryGoodsStatue" resultType="java.lang.String" parameterType="java.lang.Integer">
-        select sell_status
-        from t_goods
-        <where>
-            <if test="id!=null">
-                id=#{id}
-            </if>
-            <if test="userId !=null">
-                AND user_id=#{userId}
-            </if>
-        </where>
-    </select>
     <select id="selectCarByUserId" resultType="com.zhou.demo.persist.po.Goods">
         select
         *
@@ -132,10 +38,25 @@
 
     <select id="selectCarCountByUserId" resultType="java.lang.Integer">
         select
-        count(tc.goodsid)
+        count(tcg.goods_id)
         from t_car tc
-        left join t_car_goods tcg on tc.id=tcg.carid
-        where tc.userid=#{userId}AND del_flag=0;
+        left join t_car_goods tcg on tc.id=tcg.car_id
+        left join t_goods tg on tcg.goods_id=tg.id
+        where tc.user_id=#{userId} AND tcg.del_flag=0;
+    </select>
+
+    <select id="selectCarGoodsByUserId" resultMap="baseResultMap">
+        select
+        tg.id as id,
+        tg.picture as picture,
+        tg.goods_name as goods_name,
+        tg.goods_detail as goods_detail,
+        tg.price as price
+        from t_car tc
+        left join t_car_goods tcg on tc.id = tcg.car_id
+        left join t_goods tg on tcg.goods_id = tg.id
+        where tc.user_id=#{userId} AND tcg.del_flag=0
+        limit #{pageindex},#{pagesize}
     </select>
 
     <insert id="connectUserAndGoods" parameterType="java.lang.Integer">

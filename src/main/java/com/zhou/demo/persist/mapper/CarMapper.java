@@ -1,5 +1,6 @@
 package com.zhou.demo.persist.mapper;
 
+import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.persist.po.Goods;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,4 +22,7 @@ public interface CarMapper {
     List<Goods> selectCarByUserId(Integer userId);
 
     int selectCarCountByUserId(Integer userId);
+
+    List<Goods> selectCarGoodsByUserId(SearchParams searchParams);
+
 }
