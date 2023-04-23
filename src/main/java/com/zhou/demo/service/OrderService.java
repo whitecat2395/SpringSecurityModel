@@ -4,6 +4,7 @@ import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.domain.LoginUser;
 import com.zhou.demo.persist.mapper.OrderDetailMapper;
 import com.zhou.demo.persist.mapper.OrderMapper;
+import com.zhou.demo.persist.po.Goods;
 import com.zhou.demo.persist.po.Order;
 import com.zhou.demo.persist.po.OrderDetail;
 import com.zhou.demo.persist.po.StatuePo;
@@ -27,6 +28,8 @@ public class OrderService {
 
     @Autowired
     private OrderMapper mapper;
+    @Autowired
+    private GoodsService goodsService;
 
     @Autowired
     private OrderDetailMapper OrderDetailmapper;
@@ -68,10 +71,10 @@ public class OrderService {
             return flag;
         }
         StatuePo orderStatuePo = new StatuePo();
-        Integer orderId = mapper.queryOrderByKey(orderStatuePo);
+//        Integer orderId = mapper.queryOrderByKey(orderStatuePo);
         //创建用户和商品关联关系
-        Integer flag1 =mapper.connectUserAndOrder(orderId,userId);
-        return flag1;
+//        Integer flag1 =mapper.connectUserAndOrder(orderId,userId);
+        return 0;
     }
 
     public int editOrder(Order order) {
@@ -84,11 +87,11 @@ public class OrderService {
         return mapper.updateStatue(StatuePo);
     }
 
-    public int deleteOrder(Integer id) {
+    public int deleteOrder(String  id) {
         return mapper.deleteOrder(id,null);
     }
 
-    public String  querySataue(Integer id) {
+    public String  querySataue(String  id) {
         return mapper.queryOrderStatue(id,null);
     }
 
@@ -118,7 +121,7 @@ public class OrderService {
         return map;
     }
 
-    public String querySataueBySelUser(Integer id) {
+    public String querySataueBySelUser(String id) {
         //从handler中获取当前用户的信息
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser= (LoginUser)authentication.getPrincipal();
@@ -153,10 +156,10 @@ public class OrderService {
         }
         StatuePo orderStatuePo = new StatuePo();
         orderStatuePo.setUserId(userId);
-        Integer orderId = mapper.queryOrderByKey(orderStatuePo);
+//        Integer orderId = mapper.queryOrderByKey(orderStatuePo);
         //创建用户和订单关联关系
-        Integer flag1 =mapper.connectUserAndOrder(orderId,userId);
-        return flag1;
+//        Integer flag1 =mapper.connectUserAndOrder(orderId,userId);
+        return 0;
 
     }
 
@@ -169,11 +172,69 @@ public class OrderService {
         return mapper.updateStatue(orderStatuePo);
     }
 
-    public int deleteOrderBySelUser(Integer id) {
+    public int deleteOrderBySelUser(String  id) {
         //从handler中获取当前用户的信息
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser= (LoginUser)authentication.getPrincipal();
         Integer userId = loginUser.getUser().getId();
         return mapper.deleteOrder(id,userId);
+    }
+
+    public String  createOrder(Goods goods) {
+        //从handler中获取当前用户的信息
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser= (LoginUser)authentication.getPrincipal();
+        Integer userId = loginUser.getUser().getId();
+
+        Order order = new Order();
+        String uuId = UUID.randomUUID().toString();
+        order.setId(uuId);
+        order.setUserId(userId);
+        //未支付
+        order.setStatus("0");
+        order.setCreateTime(new Date());
+        order.setDelFlag(false);
+        Integer flag = mapper.addOrder(order);
+        if(flag==0){
+            return "";
+        }
+        //为订单绑定商品
+        String result = bandingGoods(goods,order.getId());
+        if("".equals(result)){
+            return "";
+        }
+        return order.getId();
+    }
+
+    private String bandingGoods(Goods goods, String id) {
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setSellerId(goods.getUserId());
+        orderDetail.setGoodsId(goods.getId());
+        orderDetail.setGoodsImg(goods.getPicture());
+        orderDetail.setGoodsName(goods.getGoodsName());
+        orderDetail.setGoodsPrice(goods.getPrice());
+        orderDetail.setBuyCount(1);
+        orderDetail.setStatus("0");
+        orderDetail.setCreateTime(new Date());
+        orderDetail.setDelFlag(false);
+        orderDetail.setOrderId(id);
+        Integer flag = mapper.addOrderDetail(orderDetail);
+        if(flag==0){
+            return "";
+        }
+        return "绑定成功";
+    }
+
+    public OrderDetail selectOrderDetailByOrderId(String  orderId) {
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setOrderId(orderId);
+        return mapper.selectOrderDetail(orderDetail);
+    }
+
+    public OrderDetail selectOrderDetailNoPay(String orderId) {
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setOrderId(orderId);
+        orderDetail.setStatus("0");
+        return mapper.selectOrderDetail(orderDetail);
     }
 }

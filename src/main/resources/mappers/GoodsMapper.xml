@@ -121,6 +121,11 @@
             </if>
         </where>
     </select>
+    <select id="selectGoodsById" resultMap="baseResultMap">
+        select *
+        from t_goods
+        where id = #{goodsId}
+    </select>
 
     <insert id="connectUserAndGoods" parameterType="java.lang.Integer">
         insert into t_user_goods

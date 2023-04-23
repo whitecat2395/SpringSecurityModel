@@ -76,7 +76,7 @@ public class pictureController {
     }
 
 
-    @RequestMapping(path = "/image/{filename}", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
+    @RequestMapping(path = "/images/{filename}", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
                 MediaType.IMAGE_PNG_VALUE })
         public BufferedImage getImage(@PathVariable("filename") String filename) throws IOException, IOException {
             // 首先组合文件对象http://localhost:9090/image/phone3.jpg

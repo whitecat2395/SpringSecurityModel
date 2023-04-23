@@ -35,4 +35,6 @@ public interface GoodsMapper {
     Integer connectUserAndGoods(Integer goodsId, Integer userId);
 
     String  queryGoodsStatue(Integer id,Integer userId);
+
+    Goods selectGoodsById(Integer goodsId);
 }

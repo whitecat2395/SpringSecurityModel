@@ -2,6 +2,7 @@ package com.zhou.demo.persist.mapper;
 
 import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.persist.po.Order;
+import com.zhou.demo.persist.po.OrderDetail;
 import com.zhou.demo.persist.po.StatuePo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -25,13 +26,17 @@ public interface OrderMapper {
 
     Integer updateStatue(StatuePo StatuePo);
 
-    Integer deleteOrder(Integer id, Integer userId);
+    Integer deleteOrder(String id, Integer userId);
 
     Integer updateOrder(Order Order);
 
-    Integer queryOrderByKey(StatuePo StatuePo);
 
     Integer connectUserAndOrder(Integer orderId, Integer userId);
 
-    String  queryOrderStatue(Integer id,Integer userId);
+    String  queryOrderStatue(String id,Integer userId);
+
+    Integer addOrderDetail(OrderDetail orderDetail);
+
+    OrderDetail selectOrderDetail(OrderDetail orderDetail);
+
 }

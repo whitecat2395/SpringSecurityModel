@@ -92,7 +92,7 @@ public class SelOrderController implements InitializingBean {
 
     @PreAuthorize("hasAuthority('system:order:list')")
     @DeleteMapping("/selorder/delOrder/{id}")
-    public CommonResult delUser(@PathVariable Integer id) {
+    public CommonResult delUser(@PathVariable String  id) {
         int flag = orderService.deleteOrderBySelUser(id);
         if (flag == 0) {
             return new CommonResult(200, "删除失败");

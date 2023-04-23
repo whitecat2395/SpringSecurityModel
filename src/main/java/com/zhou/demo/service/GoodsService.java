@@ -4,10 +4,7 @@ import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.domain.LoginUser;
 import com.zhou.demo.persist.mapper.GoodsMapper;
 import com.zhou.demo.persist.mapper.RoleMapper;
-import com.zhou.demo.persist.po.Goods;
-import com.zhou.demo.persist.po.GoodsStatuePo;
-import com.zhou.demo.persist.po.Role;
-import com.zhou.demo.persist.po.RoleStatuePo;
+import com.zhou.demo.persist.po.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -202,5 +199,9 @@ public class GoodsService {
         map.put("tableData",tableData);
         map.put("SearchParams",searchParams);
         return map;
+    }
+
+    public Goods selectGoodsById(Integer goodsId) {
+        return mapper.selectGoodsById(goodsId);
     }
 }

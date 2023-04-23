@@ -21,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class Order {
 
-    private Integer id;
+    private String id;
 
     private Integer userId;
 

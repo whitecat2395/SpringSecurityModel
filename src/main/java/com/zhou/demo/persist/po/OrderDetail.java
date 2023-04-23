@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -19,16 +20,16 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDetail {
+public class OrderDetail implements Serializable {
     private Integer id;
-    private Integer orderId;
+    private String  orderId;
     private Integer goodsId;
     private Integer sellerId;
     private Integer expressId;
     private String  expressName;
     private String  goodsImg;
     private Integer buyCount;
-    private Integer goodsPrice;
+    private Double goodsPrice;
     private String  goodsName;
     private String status;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
