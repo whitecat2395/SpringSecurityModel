@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class OrderRequest implements Serializable {
 
-    private Integer id;
+    private String id;
 
     private Integer userId;
 

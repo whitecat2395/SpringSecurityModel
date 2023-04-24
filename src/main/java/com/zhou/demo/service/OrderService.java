@@ -4,10 +4,7 @@ import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.domain.LoginUser;
 import com.zhou.demo.persist.mapper.OrderDetailMapper;
 import com.zhou.demo.persist.mapper.OrderMapper;
-import com.zhou.demo.persist.po.Goods;
-import com.zhou.demo.persist.po.Order;
-import com.zhou.demo.persist.po.OrderDetail;
-import com.zhou.demo.persist.po.StatuePo;
+import com.zhou.demo.persist.po.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -83,16 +80,16 @@ public class OrderService {
         return mapper.updateOrder(order);
     }
 
-    public int updateStatue(StatuePo StatuePo) {
-        return mapper.updateStatue(StatuePo);
+    public int updateStatue(OrderStatuePo orderStatuePo) {
+        return mapper.updateStatue(orderStatuePo);
     }
 
     public int deleteOrder(String  id) {
         return mapper.deleteOrder(id,null);
     }
 
-    public String  querySataue(String  id) {
-        return mapper.queryOrderStatue(id,null);
+    public String  querySatau(String  id) {
+        return mapper.queryOrderStatus(id);
     }
 
     public Map queryAllOrderBySelUser(SearchParams searchParams) {
@@ -121,12 +118,12 @@ public class OrderService {
         return map;
     }
 
-    public String querySataueBySelUser(String id) {
+    public String querySatausBySelUser(String id) {
         //从handler中获取当前用户的信息
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser= (LoginUser)authentication.getPrincipal();
         Integer userId = loginUser.getUser().getId();
-        return mapper.queryOrderStatue(id,userId);
+        return mapper.queryOrderStatus(id);
     }
 
     public int editOrderBySelUser(Order order) {
@@ -163,12 +160,13 @@ public class OrderService {
 
     }
 
-    public int updateStatueBySelUser(StatuePo orderStatuePo) {
+    public int updateStatueBySelUser(OrderStatuePo orderStatuePo) {
         //从handler中获取当前用户的信息
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser= (LoginUser)authentication.getPrincipal();
         Integer userId = loginUser.getUser().getId();
         orderStatuePo.setUserId(userId);
+        orderStatuePo.setStatus("0");
         return mapper.updateStatue(orderStatuePo);
     }
 
@@ -237,4 +235,9 @@ public class OrderService {
         orderDetail.setStatus("0");
         return mapper.selectOrderDetail(orderDetail);
     }
+
+    public String selectorderStatusByOrderId(String orderId) {
+        return mapper.queryOrderStatus(orderId);
+    }
+
 }

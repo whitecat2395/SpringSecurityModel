@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -41,7 +42,6 @@ public class GoodsController {
         Map map= goodsService.queryAllGoods(searchParams);
         return new CommonResult<Map>(200,"查询成功",map);
     }
-
     @PreAuthorize("hasAuthority('system:goods:list')")
     @PostMapping("/goods/goodsEdit")
     public CommonResult Editgoods(@RequestBody GoodsRequest goodsRequest){

@@ -13,5 +13,10 @@
         values
         (#{photoName},#{path})
     </insert>
+    <select id="selectUrlByGoodsId" resultType="java.lang.String">
+        select photo_name
+        from t_photo
+        where goods_id=#{goodsId}
+    </select>
 
 </mapper>

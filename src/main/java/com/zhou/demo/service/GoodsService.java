@@ -204,4 +204,5 @@ public class GoodsService {
     public Goods selectGoodsById(Integer goodsId) {
         return mapper.selectGoodsById(goodsId);
     }
+
 }

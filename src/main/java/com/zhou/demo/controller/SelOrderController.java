@@ -12,6 +12,7 @@ import com.zhou.demo.controller.request.OrderRequest;
 import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.domain.CommonResult;
 import com.zhou.demo.persist.po.Order;
+import com.zhou.demo.persist.po.OrderStatuePo;
 import com.zhou.demo.persist.po.StatuePo;
 import com.zhou.demo.service.OrderService;
 import org.springframework.beans.BeanUtils;
@@ -55,7 +56,7 @@ public class SelOrderController implements InitializingBean {
     public CommonResult editOrder(@RequestBody OrderRequest orderRequest) {
         Order order = new Order();
         BeanUtils.copyProperties(orderRequest, order);
-        String statue = orderService.querySataueBySelUser(order.getId());
+        String statue = orderService.querySatausBySelUser(order.getId());
         if ("1".equals(statue)) {
             return new CommonResult(200, "商品已售出,无法修改");
         }
@@ -80,8 +81,8 @@ public class SelOrderController implements InitializingBean {
     @PutMapping("/selorder/{id}/statue/{statue}")
     public CommonResult updateStatue(@PathVariable String id,
                                      @PathVariable String status) {
-        StatuePo orderStatuePo = new StatuePo();
-        orderStatuePo.setId(Integer.parseInt(id));
+        OrderStatuePo orderStatuePo = new OrderStatuePo();
+        orderStatuePo.setId(id);
         orderStatuePo.setStatus(status);
         int flag = orderService.updateStatueBySelUser(orderStatuePo);
         if (flag == 0) {

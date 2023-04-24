@@ -33,12 +33,12 @@
         (#{id},#{userId},#{status},#{createTime},#{delFlag})
     </insert>
 
-    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.StatuePo">
+    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.OrderStatuePo">
         update t_order
         set
         status=#{statue}
         <where>
-            <if test="id!=null">
+            <if test="id !=null and id = '' ">
                 id=#{id}
             </if>
             <if test="userId !=null">
@@ -109,11 +109,11 @@
          from t_order
          where user_id=#{userId}
     </select>
-    <select id="queryOrderStatue" resultType="java.lang.String" parameterType="java.lang.Integer">
+    <select id="queryOrderStatus" resultType="java.lang.String" parameterType="java.lang.String">
         select status
         from t_order
         <where>
-            <if test="id!=null">
+            <if test="id != null and id !='' ">
                 id=#{id}
             </if>
         </where>
@@ -144,6 +144,7 @@
             </if>
         </where>
     </select>
+
     <insert id="addOrderDetail" parameterType="com.zhou.demo.persist.po.OrderDetail" >
         insert into t_order_detail
         (order_id,goods_id,seller_id,goods_img,buy_count,goods_price,goods_name,status,create_time,del_flag)

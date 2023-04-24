@@ -3,10 +3,7 @@ package com.zhou.demo.controller;
 import com.zhou.demo.controller.request.OrderRequest;
 import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.domain.CommonResult;
-import com.zhou.demo.persist.po.Goods;
-import com.zhou.demo.persist.po.Order;
-import com.zhou.demo.persist.po.OrderDetail;
-import com.zhou.demo.persist.po.StatuePo;
+import com.zhou.demo.persist.po.*;
 import com.zhou.demo.service.GoodsService;
 import com.zhou.demo.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -76,8 +73,8 @@ public class OrderController {
     @PutMapping("/order/{id}/statue/{status}")
     public CommonResult updateStatue(@PathVariable String id,
                                      @PathVariable String status){
-        StatuePo orderStatuePo = new StatuePo();
-        orderStatuePo.setId(Integer.parseInt(id));
+        OrderStatuePo orderStatuePo = new OrderStatuePo();
+        orderStatuePo.setId(id);
         orderStatuePo.setStatus(status);
         int flag = orderService.updateStatue(orderStatuePo);
         if(flag==0){

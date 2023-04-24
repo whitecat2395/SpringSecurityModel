@@ -3,7 +3,7 @@
 <mapper namespace="com.zhou.demo.persist.mapper.OrderDetailMapper">
     <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.OrderDetail">
         <result column="id" jdbcType="INTEGER" property="id"></result>
-        <result column="order_id" jdbcType="INTEGER" property="orderId"></result>
+        <result column="order_id" jdbcType="VARCHAR" property="orderId"></result>
         <result column="goods_id" jdbcType="INTEGER" property="goodsId"></result>
         <result column="seller_id" jdbcType="INTEGER" property="sellerId"></result>
         <result column="express_id" jdbcType="INTEGER" property="expressId"></result>

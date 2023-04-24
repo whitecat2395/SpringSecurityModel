@@ -3,6 +3,8 @@ package com.zhou.demo.persist.mapper;
 import com.zhou.demo.persist.po.Photo;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @ClassName PhotoMapper
  * @Author
@@ -14,5 +16,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PhotoMapper {
 
-    public int addPhoto(Photo photo);
+    int addPhoto(Photo photo);
+
+    List<String> selectUrlByGoodsId(Integer goodsId);
+
 }
