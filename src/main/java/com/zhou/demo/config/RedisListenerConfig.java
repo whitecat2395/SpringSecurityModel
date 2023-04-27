@@ -25,13 +25,13 @@ public class RedisListenerConfig {
     /**
      * 处理乱码
      */
-    @Bean
-    public RedisTemplate redisTemplate() {
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
-        return redisTemplate;
-    }
+//    @Bean
+//    public RedisTemplate redisTemplate() {
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+//
+//        return redisTemplate;
+//    }
 
     @Bean
     RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory) {

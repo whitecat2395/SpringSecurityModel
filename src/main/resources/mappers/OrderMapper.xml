@@ -36,11 +36,13 @@
     <update id="updateStatue" parameterType="com.zhou.demo.persist.po.OrderStatuePo">
         update t_order
         set
-        status=#{statue}
+        status=#{status},
+        update_time=#{updateTime}
         <where>
-            <if test="id !=null and id = '' ">
+            <if test="id !=null and id != '' ">
                 id=#{id}
             </if>
+
             <if test="userId !=null">
                 AND user_id=#{userId}
             </if>

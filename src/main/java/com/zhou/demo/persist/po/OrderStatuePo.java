@@ -2,6 +2,8 @@ package com.zhou.demo.persist.po;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @ClassName OrderStatuePo
  * @Author
@@ -14,4 +16,5 @@ public class OrderStatuePo {
     private String id;
     private String status;
     private Integer userId;
+    private Date updateTime;
 }

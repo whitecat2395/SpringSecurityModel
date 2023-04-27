@@ -81,6 +81,7 @@ public class OrderService {
     }
 
     public int updateStatue(OrderStatuePo orderStatuePo) {
+        orderStatuePo.setUpdateTime(new Date());
         return mapper.updateStatue(orderStatuePo);
     }
 

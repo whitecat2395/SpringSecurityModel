@@ -1,5 +1,6 @@
 package com.zhou.demo.persist.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zhou.demo.controller.request.SearchParams;
 import com.zhou.demo.persist.po.Order;
 import com.zhou.demo.persist.po.OrderDetail;
@@ -39,6 +40,5 @@ public interface OrderMapper {
     Integer addOrderDetail(OrderDetail orderDetail);
 
     OrderDetail selectOrderDetail(OrderDetail orderDetail);
-
 
 }
