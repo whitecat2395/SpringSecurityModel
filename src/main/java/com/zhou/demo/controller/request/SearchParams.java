@@ -42,4 +42,5 @@ public class SearchParams implements Serializable {
 
     private Integer userId;
 
+    private Integer categoryId;
 }

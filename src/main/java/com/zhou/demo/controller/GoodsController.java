@@ -34,11 +34,13 @@ public class GoodsController {
     public CommonResult<Map> userList(@RequestParam("keyword") String keyword,
                                       @RequestParam("pagenum") Integer pagenum,
                                       @RequestParam("pagesize") Integer pagesize,
-                                      @RequestParam("total") Integer total){
+                                      @RequestParam("total") Integer total,
+                                      @RequestParam("categoryId") Integer categoryId  ){
         SearchParams searchParams = new SearchParams();
         searchParams.setKeyword(keyword);
         searchParams.setPagenum(pagenum);
         searchParams.setPagesize(pagesize);
+        searchParams.setCategoryId(categoryId);
         Map map= goodsService.queryAllGoods(searchParams);
         return new CommonResult<Map>(200,"查询成功",map);
     }

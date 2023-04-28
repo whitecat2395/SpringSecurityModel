@@ -12,4 +12,5 @@
         select *
         from t_category
     </select>
+
 </mapper>
