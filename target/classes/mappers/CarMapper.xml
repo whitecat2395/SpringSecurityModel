@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.demo.persist.mapper.CarMapper">
+    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.Goods">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="category_id" jdbcType="INTEGER" property="categoryId"></result>
+        <result column="user_id" jdbcType="INTEGER" property="userId"></result>
+        <result column="uukey" jdbcType="VARCHAR" property="uukey"></result>
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName"></result>
+        <result column="price" jdbcType="DOUBLE" property="price"></result>
+        <result column="original_price" jdbcType="DOUBLE" property="originalPrice"></result>
+        <result column="goods_detail" jdbcType="VARCHAR" property="goodsDetail"></result>
+        <result column="goods_number" jdbcType="INTEGER" property="goodsNumber"></result>
+        <result column="heat" jdbcType="INTEGER" property="heat"></result>
+        <result column="picture" jdbcType="VARCHAR" property="picture"></result>
+        <result column="sell_status" jdbcType="TINYINT" property="sellStatus"></result>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"></result>
+        <result column="del_flag" jdbcType="TIMESTAMP" property="delFlag"></result>
+    </resultMap>
+
+    <insert id="addGoods" parameterType="com.zhou.demo.persist.po.Goods">
+        insert into t_Car
+        (category_id,user_id,uukey,goods_name,price,original_price,goods_detail,goods_number,heat,picture,sell_status,create_time,del_flag)
+        values
+        (#{categoryId},#{userId},#{uukey},#{goodsName},#{price},#{originalPrice},#{goodsDetail},#{goodsNumber},#{heat},#{picture},#{sellStatus},#{createTime},#{delFlag})
+    </insert>
+
+
+    <select id="selectCarByUserId" resultType="com.zhou.demo.persist.po.Goods">
+        select
+        *
+        from t_car tc
+        left join t_car_goods tcg on tc.id=tcg.carid
+        left join t_goods tg on tcg.goodsid=tg.id
+        where tc.userid=#{userId}AND del_flag=0;
+    </select>
+
+    <select id="selectCarCountByUserId" resultType="java.lang.Integer">
+        select
+        count(tcg.goods_id)
+        from t_car tc
+        left join t_car_goods tcg on tc.id=tcg.car_id
+        left join t_goods tg on tcg.goods_id=tg.id
+        where tc.user_id=#{userId} AND tcg.del_flag=0;
+    </select>
+
+    <select id="selectCarGoodsByUserId" resultMap="baseResultMap">
+        select
+        tg.id as id,
+        tg.picture as picture,
+        tg.goods_name as goods_name,
+        tg.goods_detail as goods_detail,
+        tg.price as price
+        from t_car tc
+        left join t_car_goods tcg on tc.id = tcg.car_id
+        left join t_goods tg on tcg.goods_id = tg.id
+        where tc.user_id=#{userId} AND tcg.del_flag=0
+        limit #{pageindex},#{pagesize}
+    </select>
+
+    <insert id="connectUserAndGoods" parameterType="java.lang.Integer">
+        insert into t_user_goods
+        (user_id,goods_id)
+        values(#{userId},#{goodsId})
+    </insert>
+
+</mapper>

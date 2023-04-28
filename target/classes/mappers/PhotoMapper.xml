@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.demo.persist.mapper.PhotoMapper">
+    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.Photo">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"></result>
+        <result column="photo_name" jdbcType="VARCHAR" property="photoName"></result>
+        <result column="path" jdbcType="VARCHAR" property="path"></result>
+    </resultMap>
+    <insert id="addPhoto"  parameterType="com.zhou.demo.persist.po.Photo">
+        insert into t_photo
+        (photo_name,path)
+        values
+        (#{photoName},#{path})
+    </insert>
+    <select id="selectUrlByGoodsId" resultType="java.lang.String">
+        select photo_name
+        from t_photo
+        where goods_id=#{goodsId}
+    </select>
+
+</mapper>

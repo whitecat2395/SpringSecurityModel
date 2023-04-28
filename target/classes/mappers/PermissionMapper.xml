@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.demo.persist.mapper.PermissionMapper">
+    <resultMap id="baseResultMap" type="com.zhou.demo.persist.po.Permission">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="permission_name" jdbcType="VARCHAR" property="permissionName"></result>
+        <result column="permission_key" jdbcType="VARCHAR" property="permissionKey"></result>
+        <result column="status" jdbcType="VARCHAR" property="status"></result>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"></result>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"></result>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"></result>
+        <result column="del_flag" jdbcType="TIMESTAMP" property="delFlag"></result>
+    </resultMap>
+    <insert id="addPermission" parameterType="com.zhou.demo.persist.po.Permission">
+        insert into t_permission
+        (permission_name,permission_key,status,create_by,create_time,del_flag)
+        values
+        (#{permissionName},#{permissionKey},#{status},#{createBy},#{createTime},#{delFlag})
+    </insert>
+    <update id="updateStatue" parameterType="com.zhou.demo.persist.po.StatuePo" >
+        update t_permission
+        set
+        status=#{status}
+        where id=#{id}
+    </update>
+
+    <update id="deletePermission" parameterType="java.lang.Integer">
+        update t_permission
+        set
+        del_flag = #{delFlag}
+        where id=#{id}
+    </update>
+    <update id="updatePermission">
+        update t_permission
+        set
+        permission_name=#{permissionName},
+        permission_key=#{permissionKey},
+        update_time=#{updateTime},
+        update_by=#{updateBy}
+        where id=#{id}
+    </update>
+
+    <select id="queryAllPermissions" resultMap="baseResultMap">
+        select *
+        from t_permission
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">AND permission_name like #{keyword}</if>
+        </where>
+        limit #{pageindex},#{pagesize}
+    </select>
+    <select id="queryPermissionCount" resultType="java.lang.Integer">
+        select count(id)
+        from t_permission
+        <where>
+            del_flag = 0
+            <if test="keyword != null and keyword != ''">AND permission_name like #{keyword}</if>
+        </where>
+    </select>
+</mapper>
