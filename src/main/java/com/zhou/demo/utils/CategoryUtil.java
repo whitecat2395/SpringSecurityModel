@@ -37,7 +37,6 @@ public class CategoryUtil {
                 roots.add(categoryTreeVo);
             }
         }
-
         // 删除一级菜单
         allList.removeAll(roots);
 

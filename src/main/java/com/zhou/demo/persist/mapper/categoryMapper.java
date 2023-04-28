@@ -1,6 +1,7 @@
 package com.zhou.demo.persist.mapper;
 
 import com.zhou.demo.persist.po.CategoryTreeVo;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -11,9 +12,10 @@ import java.util.List;
  * @Version
  * @Description
  */
-
+@Mapper
 public interface categoryMapper {
 
     List<CategoryTreeVo> selectlist();
+
 
 }

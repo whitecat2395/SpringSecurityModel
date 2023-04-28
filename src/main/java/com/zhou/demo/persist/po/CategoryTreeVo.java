@@ -43,4 +43,5 @@ public class CategoryTreeVo {
      */
     @TableField(exist = false)
     private List<CategoryTreeVo> childMenu;
+
 }

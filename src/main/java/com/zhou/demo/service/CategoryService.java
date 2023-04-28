@@ -23,5 +23,6 @@ public class CategoryService {
 
     public List<CategoryTreeVo> selectCategoryList() {
         return mapper.selectlist();
+
     }
 }

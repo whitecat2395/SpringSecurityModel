@@ -26,6 +26,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+
     @GetMapping(value = "/getAllCategory")
     @ResponseBody
     public List<CategoryTreeVo> getAllSupplier(){
