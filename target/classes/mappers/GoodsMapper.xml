@@ -83,7 +83,7 @@
             <if test="userId != null">
                 AND user_id=#{userId}
             </if>
-            <if test="categoryId != null">
+            <if test="categoryId != null and categoryId!=0">
                 AND category_id = #{categoryId}
             </if>
             <if test="keyword != null and keyword != ''">

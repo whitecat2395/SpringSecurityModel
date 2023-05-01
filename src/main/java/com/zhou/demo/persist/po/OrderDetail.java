@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDetail implements Serializable {
-    private Integer id;
+    private Long id;
     private String  orderId;
     private Integer goodsId;
     private Integer sellerId;
